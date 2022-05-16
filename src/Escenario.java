@@ -9,6 +9,7 @@ public abstract class Escenario {
     protected Fondo fondo;
     protected Rectangle limites;
     protected ArrayList<Rectangle> obstactulos;
+    protected ArrayList<Enemigo> enemigos;
     
 
     protected final static double ANCHO=800; //256*3.125; //Cuenta para que me de 800 pixeles de Ancho
@@ -37,6 +38,9 @@ public abstract class Escenario {
     }
 
     public static Escenario get_nivel() {
+        if(NIVEL==null){
+            crear_nivel();
+        }
         return NIVEL;
     }
 

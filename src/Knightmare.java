@@ -15,7 +15,7 @@ import java.awt.Graphics2D;
 
 public class Knightmare extends JGame {
 
-    final double POPOLON = 250.0;
+    final double POPOLON = 150.0;
     Popolon heroe;
     Escenario nivel;
     Camara cam;
@@ -50,7 +50,7 @@ public class Knightmare extends JGame {
 
     @Override
     public void gameStartup() {
-        nivel = new PrimerNivel();
+        nivel = Escenario.get_nivel();
         heroe = new Popolon("imagenes/popolon0.png");
         heroe.setPosition(375, 5820);
         cam = new Camara(0, 0);
@@ -89,18 +89,15 @@ public class Knightmare extends JGame {
         }
         if (keyboard.isKeyPressed(KeyEvent.VK_UP)) {
             System.out.println(heroe.getY());
-
             heroe.setY(heroe.getY() - POPOLON * delta);
 
         }
         if (keyboard.isKeyPressed(KeyEvent.VK_LEFT)) {
             System.out.println(heroe.getX());
-
             heroe.setX(heroe.getX() - POPOLON * delta);
         }
         if (keyboard.isKeyPressed(KeyEvent.VK_RIGHT)) {
             System.out.println(heroe.getX());
-
             heroe.setX(heroe.getX() + POPOLON * delta);
 
         }
