@@ -8,6 +8,7 @@ public abstract class Escenario {
     protected static Escenario NIVEL= null;
     protected Fondo fondo;
     protected Rectangle limites;
+    protected final int PILAR=94;
     protected ArrayList<Rectangle> obstactulos=new ArrayList<Rectangle>(1);
     protected ArrayList<Enemigo> enemigos;
     
@@ -61,7 +62,7 @@ public abstract class Escenario {
     public void display(Graphics2D g2) {
         
         fondo.display(g2);
-        g2.draw(limites);
+        
 
         for(Rectangle obstaculo:obstactulos){
             g2.draw(obstaculo);
@@ -83,10 +84,11 @@ public abstract class Escenario {
             if(obstaculo.intersects(siguientePosicion)){
                 return true;
             } 
-        }
-        
+        }   
         return false;
-    }    
+    } 
+    
+    
 
 
 

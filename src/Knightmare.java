@@ -76,31 +76,21 @@ public class Knightmare extends JGame {
             System.out.println("Hitbox heroe:" + heroe.hitbox);
         }
 
-        // if(heroe.hitbox.intersects(Escenario.NIVEL.getLimites()))
-        // {
-        // System.out.println("Intersectado");
-        // }
-
-        if (keyboard.isKeyPressed(KeyEvent.VK_DOWN)) {
+        if (keyboard.isKeyPressed(KeyEvent.VK_DOWN)){
             heroe.down(delta);
         }
-        if (keyboard.isKeyPressed(KeyEvent.VK_UP)) {
-            System.out.println(heroe.getY());
-            heroe.setY(heroe.getY() - 150 * delta);
-
+        if (keyboard.isKeyPressed(KeyEvent.VK_UP)){
+            heroe.up(delta);
         }
-        if (keyboard.isKeyPressed(KeyEvent.VK_LEFT)) {
-            System.out.println(heroe.getX());
-            heroe.setX(heroe.getX() - 150 * delta);
+        if (keyboard.isKeyPressed(KeyEvent.VK_LEFT)){
+            heroe.left(delta);
         }
         if (keyboard.isKeyPressed(KeyEvent.VK_RIGHT)) {
-            System.out.println(heroe.getX());
-            heroe.setX(heroe.getX() + 150 * delta);
-
+            heroe.right(delta);
         }
 
+
         heroe.update(delta);
-        // Escenario.get_nivel().updateFondo();
         cam.seguirPersonaje(heroe);
         
 

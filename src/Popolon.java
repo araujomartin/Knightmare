@@ -97,19 +97,47 @@ public class Popolon extends Personaje {
 
     }
 
-    public void down(double delta){
+    public void down(double delta) {
 
-        Escenario nivel=Escenario.get_nivel();
-        Rectangle SiguientePosicion=this.hitbox;
-        SiguientePosicion.move(this.hitbox.x, (int)(this.positionY + velocidad * delta));
-        
-        System.out.println(!nivel.colisionObstaculo(SiguientePosicion));
-        if(!nivel.colisionObstaculo(SiguientePosicion)){
-            positionY=(this.positionY + velocidad * delta);
+        Escenario nivel = Escenario.get_nivel();
+        Rectangle SiguientePosicion = new Rectangle(this.hitbox.x, (int) (this.positionY + velocidad * delta),this.hitbox.width, this.hitbox.height);
+    
+        if (!nivel.colisionObstaculo(SiguientePosicion)) {
+            positionY = (this.positionY + velocidad * delta);
         }
-        
+
     }
 
+    public void up(double delta) {
+        Escenario nivel = Escenario.get_nivel();
+        Rectangle SiguientePosicion = new Rectangle(this.hitbox.x, (int) (this.positionY - velocidad * delta),this.hitbox.width, this.hitbox.height);
+       
+        if (!nivel.colisionObstaculo(SiguientePosicion)) {
+            positionY = (this.positionY - velocidad * delta);
+        }
+
+    }
+
+    public void left(double delta) {
+        Escenario nivel = Escenario.get_nivel();
+        Rectangle SiguientePosicion = new Rectangle((int) (this.positionX - velocidad * delta),this.hitbox.y,this.hitbox.width,this.hitbox.height);
     
+    
+        if (!nivel.colisionObstaculo(SiguientePosicion)) {
+            positionX = (this.positionX - velocidad * delta);
+        }
+
+    }
+
+    public void right(double delta){
+        Escenario nivel = Escenario.get_nivel();
+        Rectangle SiguientePosicion = new Rectangle((int) (this.positionX + velocidad * delta),this.hitbox.y,this.hitbox.width,this.hitbox.height);
+    
+
+        if (!nivel.colisionObstaculo(SiguientePosicion)) {
+            positionX = (this.positionX + velocidad * delta);
+        }
+
+    }
 
 }
