@@ -15,7 +15,6 @@ import java.awt.Graphics2D;
 
 public class Knightmare extends JGame {
 
-    final double POPOLON = 150.0;
     Popolon heroe;
     Escenario nivel;
     Camara cam;
@@ -83,28 +82,27 @@ public class Knightmare extends JGame {
         // }
 
         if (keyboard.isKeyPressed(KeyEvent.VK_DOWN)) {
-            System.out.println(heroe.getY());
-            heroe.setY(heroe.getY() + POPOLON * delta);
-
+            heroe.down(delta);
         }
         if (keyboard.isKeyPressed(KeyEvent.VK_UP)) {
             System.out.println(heroe.getY());
-            heroe.setY(heroe.getY() - POPOLON * delta);
+            heroe.setY(heroe.getY() - 150 * delta);
 
         }
         if (keyboard.isKeyPressed(KeyEvent.VK_LEFT)) {
             System.out.println(heroe.getX());
-            heroe.setX(heroe.getX() - POPOLON * delta);
+            heroe.setX(heroe.getX() - 150 * delta);
         }
         if (keyboard.isKeyPressed(KeyEvent.VK_RIGHT)) {
             System.out.println(heroe.getX());
-            heroe.setX(heroe.getX() + POPOLON * delta);
+            heroe.setX(heroe.getX() + 150 * delta);
 
         }
 
         heroe.update(delta);
         // Escenario.get_nivel().updateFondo();
         cam.seguirPersonaje(heroe);
+        
 
     }
 

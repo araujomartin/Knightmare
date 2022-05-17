@@ -97,6 +97,19 @@ public class Popolon extends Personaje {
 
     }
 
+    public void down(double delta){
+
+        Escenario nivel=Escenario.get_nivel();
+        Rectangle SiguientePosicion=this.hitbox;
+        SiguientePosicion.move(this.hitbox.x, (int)(this.positionY + velocidad * delta));
+        
+        System.out.println(!nivel.colisionObstaculo(SiguientePosicion));
+        if(!nivel.colisionObstaculo(SiguientePosicion)){
+            positionY=(this.positionY + velocidad * delta);
+        }
+        
+    }
+
     
 
 }
