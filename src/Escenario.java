@@ -12,6 +12,7 @@ public abstract class Escenario {
     protected ArrayList<Rectangle> obstactulos=new ArrayList<Rectangle>(1);
     protected ArrayList<Enemigo> enemigos;
     private int counter=0;
+    private boolean stop=false;
     
 
     protected final static double ANCHO=800; //256*3.125; //Cuenta para que me de 800 pixeles de Ancho
@@ -69,7 +70,7 @@ public abstract class Escenario {
             g2.draw(obstaculo);
         }
         
-        if(counter>2)
+        if(counter>2 && stop==false)
         {
         fondo.positionY++;
         for(Rectangle obstaculo:obstactulos){
@@ -99,6 +100,10 @@ public abstract class Escenario {
         }   
         return false;
     } 
+
+    public void stop(){
+        stop=true;
+    }
     
     
 

@@ -157,7 +157,6 @@ public class Popolon extends Personaje {
         Escenario nivel = Escenario.get_nivel();
         Rectangle SiguientePosicion = new Rectangle((int) (this.positionX + velocidad * delta),this.hitbox.y,this.hitbox.width,this.hitbox.height);
     
-
         if (!nivel.colisionObstaculo(SiguientePosicion)) {
             positionX = (this.positionX + velocidad * delta);
         }
