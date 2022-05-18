@@ -17,7 +17,7 @@ public class Popolon extends Personaje {
     public Popolon(String filename) {
         super(filename);
         estadoActual = estados.VIVO;
-        velocidad = 150;
+        velocidad = 300;
         hitbox = new Rectangle((int) this.positionX, (int) this.positionY, 50, 50); // Tamaño total de la imagen
     }
 

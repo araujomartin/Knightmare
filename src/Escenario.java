@@ -64,9 +64,9 @@ public abstract class Escenario {
         fondo.display(g2);
         
 
-        for(Rectangle obstaculo:obstactulos){
-            g2.draw(obstaculo);
-        }
+        // for(Rectangle obstaculo:obstactulos){
+        //     g2.draw(obstaculo);
+        // }
     
       }
 

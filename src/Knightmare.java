@@ -1,4 +1,3 @@
-
 /**
 Compilar
 javac -cp ".;bucleJuego.jar" Knightmare.java 
@@ -10,7 +9,6 @@ java -cp ".;bucleJuego.jar" Knightmare
 import com.entropyinteractive.*;
 import java.awt.*;
 import java.awt.event.*; //eventos
-
 import java.awt.Graphics2D;
 
 public class Knightmare extends JGame {
@@ -21,14 +19,13 @@ public class Knightmare extends JGame {
     static int numeroNivel = 1;
 
     public Knightmare() {
-        super("Juego", 800, 600);
+        super("Juego", 800, 800);
     }
 
     public static void main(String args[]) {
         Knightmare game = new Knightmare();
         game.run(1.0 / 60.0);
         System.exit(0);
-
     }
 
     @Override
