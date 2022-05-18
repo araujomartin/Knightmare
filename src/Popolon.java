@@ -17,7 +17,7 @@ public class Popolon extends Personaje {
     public Popolon(String filename) {
         super(filename);
         estadoActual = estados.VIVO;
-        velocidad = 300;
+        velocidad = 150;
         hitbox = new Rectangle((int) this.positionX, (int) this.positionY, 50, 50); // Tamaño total de la imagen
     }
 
@@ -72,6 +72,29 @@ public class Popolon extends Personaje {
             }
         }
 
+        if (estadoActual == estados.MURIENDO){
+            try {
+
+                spriteCounter++;
+
+                if (spriteCounter > 10) {
+
+                    spritePosition++;
+                    if(spritePosition>9){
+                        spritePosition=4;
+                    }
+                    imagen = ImageIO.read(getClass().getResource("imagenes/popolon" + spritePosition + ".png"));
+                    spriteCounter = 0;
+                }
+
+            } catch (IOException e) {
+                System.out.println(e);
+            }
+
+            
+
+        }
+
     }
 
     public void cambiar(estados nuevo) {
@@ -86,6 +109,7 @@ public class Popolon extends Personaje {
             case INVISIBLE:
                 break;
             case MURIENDO:
+                spritePosition= 4;
                 break;
         }
 

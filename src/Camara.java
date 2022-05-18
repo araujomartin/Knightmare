@@ -29,6 +29,10 @@ public class Camara {
 		// 	this.y = -(nivel.getHeight()-resY);
 		// }
 	}
+
+	public void seguirLimite(){
+		this.y=-Escenario.get_nivel().getLimites().getY(); 
+	}
 	
 	public void setViewPort(double x,double y){
 		setRegionVisible(x,y);
