@@ -51,6 +51,7 @@ public class Knightmare extends JGame {
     public Knightmare() {
         super("Juego", 800, 600);
         juego=this;
+        FXPlayer.init();
 
     }
 
@@ -166,7 +167,8 @@ public class Knightmare extends JGame {
 
                 if (event.getID() == KeyEvent.KEY_PRESSED) {
                     try {
-                        reproducir.play("sonidos/intro.wav");
+                        //reproducir.play("sonidos/intro.wav");
+                        FXPlayer.INTRO.play(-20.0f);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -185,7 +187,8 @@ public class Knightmare extends JGame {
             if (timer > 8) {
                 estadoJuego = gameStatus.LOOP;
                 try {
-                    reproducir.looping("sonidos/stage" + numeroNivel + ".wav");
+                    //reproducir.looping("sonidos/stage" + numeroNivel + ".wav");
+                    FXPlayer.STAGE1.play(-20.0f);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -202,8 +205,10 @@ public class Knightmare extends JGame {
             if (heroe.getEstado() == Popolon.estados.MURIENDO) {
                 if(timer==0){
                     try {
-                        reproducir.Stop();
-                        reproducir.play("sonidos/muriendo.wav");
+                        //reproducir.Stop();
+                        //reproducir.play("sonidos/muriendo.wav");
+                        FXPlayer.STAGE1.stop();
+                        FXPlayer.MUERTE.play(-20.0f);
                         nivel.stop();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -217,7 +222,8 @@ public class Knightmare extends JGame {
                 nivel.reLoadStaticObjetcs();
                 
                 try {
-                    reproducir.play("sonidos/intro.wav");
+                    //reproducir.play("sonidos/intro.wav");
+                    FXPlayer.INTRO.play(-20.0f);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

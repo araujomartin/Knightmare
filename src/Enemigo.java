@@ -32,7 +32,8 @@ public abstract class Enemigo extends Personaje{
 
         if(timer==0){
             try {
-                Knightmare.juego.reproducir.playEffect("sonidos/fuego.wav");
+                //Knightmare.juego.reproducir.playEffect("sonidos/fuego.wav");
+                FXPlayer.FUEGO.play(-5.0f);
             } catch (Exception e) {
                 e.printStackTrace();
             }

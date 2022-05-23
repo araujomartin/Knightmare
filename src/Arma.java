@@ -43,7 +43,8 @@ public class Arma {
         if (municionActual == tipoMunicion.FLECHA) {
             Escenario.get_nivel().muncionHeroe.add(new Flecha("imagenes/flecha.png", this.x, this.y, this.cadencia));
             try {
-                Knightmare.juego.reproducir.playEffect("sonidos/flecha.wav");
+                //Knightmare.juego.reproducir.playEffect("sonidos/flecha.wav")
+                FXPlayer.FLECHA.play(-5.0f);
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -7,7 +7,7 @@ public class BombasRobot extends Enemigo {
 
     public BombasRobot(String filename, int x, int y, boolean shot) {
         super(filename, shot);
-        this.hitbox = new Rectangle((int) this.positionX, (int) this.positionY, 50, 50);
+        this.hitbox = new Rectangle((int) this.positionX, (int) this.positionY, 40, 40);
         spritePosition = 1;
         this.positionX = x;
         this.positionY = y;
@@ -70,7 +70,7 @@ public class BombasRobot extends Enemigo {
     }
 
     public void display(Graphics2D g2) {
-        g2.drawImage(imagen, (int) this.positionX, (int) this.positionY, 50, 50, null, null);
+        g2.drawImage(imagen, (int) this.positionX, (int) this.positionY, 40, 40, null, null);
         g2.draw(hitbox);
     }
 
