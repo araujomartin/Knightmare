@@ -5,7 +5,7 @@ import java.io.*;
 
 public class ObjetoGrafico {
     protected BufferedImage imagen = null;
-
+    protected boolean isVisible;
     double positionX = 0;
     double positionY = 0;
 
@@ -34,8 +34,10 @@ public class ObjetoGrafico {
     }
 
     public void display(Graphics2D g2) {
-        g2.drawImage(imagen, (int) this.positionX, (int) this.positionY, null);
+        g2.drawImage(imagen, (int) this.positionX, (int) this.positionY,null);
     }
+
+   
 
     public double getX() {
         return positionX;

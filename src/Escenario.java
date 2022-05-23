@@ -2,26 +2,32 @@ import java.awt.*;
 import java.util.*;
 
 
-
 public abstract class Escenario {
 
     protected static Escenario NIVEL= null;
     protected Fondo fondo;
-    protected Rectangle limites;
+    protected final Rectangle limites;
     protected final int PILAR=94;
-    protected ArrayList<Rectangle> obstactulos=new ArrayList<Rectangle>(1);
-    protected ArrayList<Enemigo> enemigos;
-    private int counter=0;
-    private boolean stop=false;
+    protected ArrayList<Rectangle> obstaculos=new ArrayList<Rectangle>(1);
+    protected ArrayList<Ladrillo> ladrillos=new ArrayList<Ladrillo>(1);
+
+    protected ArrayList<Ladrillo> ladrillosColisionalbes= new ArrayList<Ladrillo>(1);
+    protected ArrayList<Enemigo> enemigosColisionables=new ArrayList<Enemigo>(1);
+    protected ArrayList<Municion> municionHeroeColisionada=new ArrayList<Municion>(1);
+    public ArrayList<Municion> muncionHeroe=new ArrayList<Municion>(1);
     
 
-    protected final static double ANCHO=800; //256*3.125; //Cuenta para que me de 800 pixeles de Ancho
-    protected final static double ALTO=5950; //1904*3.125; //Equivalencia para mantener el formato (5950)
-
+    protected int counter=0;
+    protected boolean stop=false;
+    protected int lastCheckPoint=0;
+    protected int[] checkpoint;
+    
+    
+    
 
     protected Escenario(String filename){ //constructor protegido, solo quiero una instancia del nivel
         fondo= new Fondo(filename);
-        limites=new Rectangle(0,5350,800,600); //Los limites del mapa son del tamaño de la ventana, estos se van a ir moviendo.       
+        limites=new Rectangle(0,80,805,500);        
     }
 
     protected static void crear_nivel(){
@@ -51,59 +57,110 @@ public abstract class Escenario {
         NIVEL=null;
     }
 
+    public abstract void update(double delta);
 
 
     public float getWidth() {
-        return (float) limites.getWidth();
+        return (float) fondo.getWidth();
     }
 
     public float getHeight() {
-        return (float) limites.getHeight();
+        return (float) fondo.getY();
     }
 
     public void display(Graphics2D g2) {
         
         fondo.display(g2);
-        
-        g2.draw(limites);
-        for(Rectangle obstaculo:obstactulos){
-            g2.draw(obstaculo);
+
+        for(Rectangle o:obstaculos){
+            g2.setColor(Color.RED);
+            g2.draw(o);
         }
         
-        if(counter>2 && stop==false)
-        {
-        fondo.positionY++;
-        for(Rectangle obstaculo:obstactulos){
-            obstaculo.y++;
+        for(Municion m: muncionHeroe){
+                m.display(g2);  
         }
-         counter=0;
+
+        for(Enemigo e: enemigosColisionables){
+            e.display(g2);
         }
-        counter++;
         
+
     
       }
-
-    public Rectangle getLimites(){
-        return limites;
-    }
+    
 
     public void addObstaculo(Rectangle obstaculo){
-        obstactulos.add(obstaculo);
+        obstaculos.add(obstaculo);
+    }
+
+    public void addEnemigo(Enemigo enemigo){
+        
     }
 
     public boolean colisionObstaculo(Rectangle siguientePosicion){
         
-        for(Rectangle obstaculo: obstactulos){
+        for(Rectangle obstaculo: obstaculos){
             if(obstaculo.intersects(siguientePosicion)){
                 return true;
             } 
         }   
         return false;
-    } 
+    }
+    
+    public boolean colisionEnemigo(Rectangle heroeHitbox){
+        // for(Enemigo enemigo: enemigos){
+        //     if(enemigo.hitbox.intersects(heroeHitbox)){
+        //         return true;
+        //     } 
+        // }   
+        return false;
+
+    }
 
     public void stop(){
         stop=true;
     }
+
+    public int checkpointPosition(){
+        return checkpoint[lastCheckPoint];
+    }
+
+    public void reLoadStaticObjetcs(){
+        int movimiento; //Variable para guardar cuanto se movio el mapa desde que arranco el nivel
+        this.stop=false;    // Para que el mapa vuelva a moverse
+        
+        // Calculo cuanto se movio el mapa desde el ultimo checkpoint, en caso de que no se haya llegado, se restaura por defecto.
+        if(lastCheckPoint!=0){
+        movimiento=(-(lastCheckPoint)+((int)this.fondo.positionY));
+        this.fondo.positionY=lastCheckPoint;
+        }
+        else{
+            movimiento=(5450)+((int)this.fondo.positionY);
+            this.fondo.positionY=-5450;
+        }
+
+        // Acomodo objetos estaticos segun el movimiento
+        for(Rectangle o: obstaculos){
+            o.y=o.y-movimiento;
+        }
+                
+    }
+
+    public boolean colisionMunicion(Municion municion){
+
+        for(Enemigo e: enemigosColisionables){
+            if(e.hitbox.intersects(municion.hitboxMunicion)){
+                e.estado=Enemigo.estadoEnemigo.MUERTO;
+                return true;
+            } 
+        }   
+        return false;
+
+        
+    }
+    
+    
     
     
 

@@ -8,38 +8,49 @@ java -cp ".;bucleJuego.jar" Knightmare
   */
 
 import com.entropyinteractive.*;
-
 import java.awt.*;
 import java.awt.event.*; //eventos
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.awt.Graphics2D;
 
 public class Knightmare extends JGame {
-    Popolon heroe;
+
+    Date dInit = new Date();
+    Date dAhora;
+    SimpleDateFormat ft = new SimpleDateFormat("mm:ss");
+    public static Knightmare juego;
+    Popolon heroe = new Popolon("imagenes/popolon0.png");
     Escenario nivel;
     Camara cam;
-    ObjetoGrafico logo;
+    Sonido reproducir;
+    Rectangle hud;
+    private final ObjetoGrafico logo = new ObjetoGrafico("imagenes/logo.png");
     static int numeroNivel = 1;
-    public int cantidadVidas;
-    public int score=0;
+    public int cantidadVidas = 3;
+    public int score = 0;
+    public int hiScore = 0;
     private Font font;
-    private double timerEstado = 0;
+    private double timer = 0;
+
+    gameStatus estadoJuego;
 
     enum gameStatus {
         MENU_PRINCIPAL,
         LOOP,
         PAUSA,
         CARGANDO,
-        GAME_OVER
+        GAME_OVER,
+        BOSS
     }
 
-    gameStatus estadoJuego;
     // Rectangle HUD=new Rectangle(0,5900,800,400);
 
     public Knightmare() {
         super("Juego", 800, 600);
-        logo = new ObjetoGrafico("imagenes/logo.png");
+        juego=this;
 
     }
 
@@ -50,67 +61,23 @@ public class Knightmare extends JGame {
     }
 
     @Override
-    public void gameDraw(Graphics2D g) {
-
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-
-        if (estadoJuego == gameStatus.MENU_PRINCIPAL) {
-            g.scale(2.0, 2.0);
-            g.setFont(font);
-            logo.display(g);
-            drawStyledString(g, "KNIGHTMARE", 205, 90, true);
-            drawStyledString(g, "© MARTIN ARAUJO 2022", 200, 200, true);
-            if (timerEstado % 1 < 0.5)
-            drawStyledString(g, "PUSH SPACE", 200, 220, true);
-            
-        }
-
-        if (estadoJuego == gameStatus.CARGANDO) {
-            g.scale(2.0, 2.0);
-            g.setFont(font);
-            drawStyledString(g, "VIDAS: "+Integer.toString(cantidadVidas), 100, 100, true);
-            g.setColor(Color.BLACK);
-        }
-
-        if(estadoJuego == gameStatus.LOOP)
-        {
-        g.translate(cam.getX(), cam.getY());
-        nivel.display(g);
-        heroe.display(g);
-        g.translate(-cam.getX(), -cam.getY());
-
-        
-
-        }
-    }
-
-    @Override
-    public void gameShutdown() {
-
-    }
-
-    @Override
     public void gameStartup() {
+
+        reproducir = new Sonido();
+        logo.setPosition(300, 250);
 
         try {
             font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("imagenes/Nintendo-NES-Font.ttf"))
-                    .deriveFont(8f);
+                    .deriveFont(15f);
             GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
         } catch (IOException e) {
             System.out.println(e);
         } catch (FontFormatException e) {
             System.out.println(e);
         }
-
         estadoJuego = gameStatus.MENU_PRINCIPAL;
-        cam = new Camara(0, 0);
-        cam.setRegionVisible(800, 600);
-        cantidadVidas = 3;
-        nivel = Escenario.get_nivel();
-        heroe = new Popolon("imagenes/popolon0.png");
-        heroe.setPosition(375, 5820);
-        // estadoJuego = gameStatus.LOOP;
+        hud = new Rectangle(0, 500, 850, 500);
+
     }
 
     private void drawStyledString(Graphics2D g2, String str, int x, int y, boolean center) {
@@ -127,50 +94,161 @@ public class Knightmare extends JGame {
     }
 
     @Override
+    public void gameDraw(Graphics2D g) {
+
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+
+        if (estadoJuego == gameStatus.MENU_PRINCIPAL) {
+            g.setFont(font);
+            logo.display(g);
+            drawStyledString(g, "KNIGHTMARE", 400, 200, true);
+            drawStyledString(g, "© MARTIN ARAUJO SOFTWARE 2022", 400, 400, true);
+            if (timer % 1 < 0.5) {
+                drawStyledString(g, "PUSH SPACE", 405, 450, true);
+            }
+
+        }
+
+        if (estadoJuego == gameStatus.CARGANDO) {
+            g.setFont(font);
+            drawStyledString(g, "STAGE "+Integer.toString(numeroNivel), 400, 200, true);
+            g.setColor(Color.BLACK);
+            g.fill(hud);
+            updateHud(g);
+        }
+
+        if (estadoJuego == gameStatus.LOOP) {
+
+            // g.translate(cam.getX(), cam.getY());
+            nivel.display(g);
+            heroe.display(g);
+            // g.translate(-cam.getX(), -cam.getY());
+            g.setColor(Color.BLACK);
+            g.draw(hud);
+            g.fill(hud);
+            updateHud(g);
+
+        }
+    }
+
+    public void updateHud(Graphics2D g) {
+
+        g.setFont(font.deriveFont(20f));
+        drawStyledString(g, "SCORE", 100, 530, false);
+        drawStyledString(g, Integer.toString(score), 90, 570, false);
+        drawStyledString(g, "HISCORE", 255, 530, false);
+        drawStyledString(g, Integer.toString(hiScore), 245, 570, false);
+        drawStyledString(g, "REST", 455, 530, false);
+        drawStyledString(g, Integer.toString(cantidadVidas), 515, 570, false);
+        drawStyledString(g, "STAGE", 600, 530, false);
+        drawStyledString(g, Integer.toString(numeroNivel), 670, 570, false);
+        g.setColor(Color.BLACK);
+
+    }
+
+    @Override
+    public void gameShutdown() {
+    }
+
+    @Override
     public void gameUpdate(double delta) {
 
         Keyboard keyboard = this.getKeyboard();
         LinkedList<KeyEvent> keyEvents = keyboard.getEvents();
 
         if (estadoJuego == gameStatus.MENU_PRINCIPAL) {
-            timerEstado += delta;
+            timer += delta;
+            for (KeyEvent event : keyEvents) {
+                if ((event.getID() == KeyEvent.KEY_PRESSED) && (event.getKeyCode() == KeyEvent.VK_ESCAPE)) {
+                    stop();
+                }
 
-            if (timerEstado <= 3) {
-                logo.setPosition(100, 100);
-            } else {
-                for (KeyEvent event : keyEvents) {
-                    if ((event.getID() == KeyEvent.KEY_PRESSED) && (event.getKeyCode() == KeyEvent.VK_ESCAPE)) {
-                        stop();
+                if (event.getID() == KeyEvent.KEY_PRESSED) {
+                    try {
+                        reproducir.play("sonidos/intro.wav");
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-
-                    if (event.getID() == KeyEvent.KEY_PRESSED) {
-                        try {
-                            // reproducir.Stop();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        ;
-                        estadoJuego=gameStatus.CARGANDO;
-                        break;
-                    }
+                    ;
+                    timer = 0;
+                    estadoJuego = gameStatus.CARGANDO;
+                    break;
                 }
             }
         }
 
+        if (estadoJuego == gameStatus.CARGANDO) {
+            timer += delta;
+            nivel = Escenario.get_nivel();
+            heroe.setPosition(382, 373);
+            if (timer > 8) {
+                estadoJuego = gameStatus.LOOP;
+                try {
+                    reproducir.looping("sonidos/stage" + numeroNivel + ".wav");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                ;
+                timer=0;
+            }
+
+        }
+
         if (estadoJuego == gameStatus.LOOP) {
+
+            nivel.update(delta);
+
+            if (heroe.getEstado() == Popolon.estados.MURIENDO) {
+                if(timer==0){
+                    try {
+                        reproducir.Stop();
+                        reproducir.play("sonidos/muriendo.wav");
+                        nivel.stop();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+        
+                if (timer > 4) {
+                this.estadoJuego = gameStatus.CARGANDO;
+                heroe.cambiar(Popolon.estados.VIVO);
+                cantidadVidas--;
+                nivel.reLoadStaticObjetcs();
+                
+                try {
+                    reproducir.play("sonidos/intro.wav");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                ;
+                timer=0;
+                }
+                timer += delta;
+                heroe.update(delta);
+                
+            }
+
+            for (KeyEvent event : keyEvents) {
+                if ((event.getID() == KeyEvent.KEY_RELEASED) && (event.getKeyCode() == KeyEvent.VK_SPACE)) {
+                    heroe.disparar();
+                }
+
+                
+            }
+
+            if(keyboard.isKeyPressed(KeyEvent.VK_T)){
+                heroe.cambiar(Popolon.estados.MURIENDO);
+            }
 
             if (nivel.colisionObstaculo(heroe.hitbox)) {
                 heroe.setY(heroe.getY() + 1);
             }
 
-            if (heroe.getY() == 5915) {
-                heroe.cambiar(Popolon.estados.MURIENDO);
-                System.out.println("GameOver");
-                // nivel.stop();
-            }
-
             if (keyboard.isKeyPressed(KeyEvent.VK_L)) {
                 heroe.cambiar(Popolon.estados.ROJO);
+                score = 0;
+                hiScore = 0;
             }
 
             if (keyboard.isKeyPressed(KeyEvent.VK_K)) {
@@ -179,6 +257,8 @@ public class Knightmare extends JGame {
 
             if (keyboard.isKeyPressed(KeyEvent.VK_J)) {
                 System.out.println("Hitbox heroe:" + heroe.hitbox);
+                score = score + 10000;
+                hiScore = hiScore + 1000;
             }
 
             if (keyboard.isKeyPressed(KeyEvent.VK_DOWN)) {
@@ -193,11 +273,15 @@ public class Knightmare extends JGame {
             if (keyboard.isKeyPressed(KeyEvent.VK_RIGHT)) {
                 heroe.right(delta);
             }
-            
-            heroe.update(delta);
-            cam.seguirPersonaje(heroe);
 
-            cam.seguirLimite();
+            heroe.update(delta);
+
+        
+            
+
+            // cam.seguirPersonaje(heroe);
+
+            // cam.seguirLimite();
         }
 
     }

@@ -5,9 +5,9 @@ import javax.imageio.*; //imagenes
 public class Popolon extends Personaje {
 
     private estados estadoActual;
-
-    public enum estados { // Los estados del personaje son publicos para poder cambiarlo a medida que
-                          // transcurre el juego.
+    public static Popolon popolon;
+    
+    public enum estados { // Los estados del personaje son publicos para poder cambiarlo a medida que transcurre el juego.
         VIVO,
         MURIENDO,
         INVISIBLE,
@@ -18,17 +18,23 @@ public class Popolon extends Personaje {
         super(filename);
         estadoActual = estados.VIVO;
         velocidad = 150;
+        isVisible=true;
         hitbox = new Rectangle((int) this.positionX, (int) this.positionY, 50, 50); // Tamaño total de la imagen
+        canShot=true;
+        popolon=this;
+        arma=new Arma(Arma.tipoMunicion.FLECHA, 0, 0);
+
     }
 
-    protected void updateHitBox() {
-        hitbox.x = (int) this.getX();
-        hitbox.y = (int) this.getY();
+    public void display(Graphics2D g2){
+        g2.drawImage(imagen, (int) this.positionX, (int) this.positionY, 50, 50, null, null);
+        g2.draw(hitbox);
     }
+
 
     public void update(double delta) {
         updateHitBox(); // Primero que nada actualizar el hitbox
-
+        updateArma((int)this.positionX+25, (int)this.positionY); // Actualizar la posicion del arma
         // Comparo el estado del personaje.
 
         if (estadoActual == estados.VIVO) {
@@ -49,6 +55,12 @@ public class Popolon extends Personaje {
             } catch (IOException e) {
                 System.out.println(e);
             }
+
+            // if(Escenario.get_nivel().colisionEnemigo(this.hitbox)){
+            //     estadoActual = estados.MURIENDO;
+            //     spritePosition=4;
+            //     spriteCounter=0;
+            // }
         }
 
         if (estadoActual == estados.ROJO) {
@@ -77,7 +89,7 @@ public class Popolon extends Personaje {
 
                 spriteCounter++;
 
-                if (spriteCounter > 10) {
+                if (spriteCounter > 25) {
 
                     spritePosition++;
                     if(spritePosition>9){
@@ -117,18 +129,25 @@ public class Popolon extends Personaje {
 
     }
 
-    public void disparo() {
-
+    public void disparar() {
+        if(canShot)
+        {
+         arma.disparo();
+          
+        }
+        
     }
 
     public void down(double delta) {
 
         Escenario nivel = Escenario.get_nivel();
         Rectangle SiguientePosicion = new Rectangle(this.hitbox.x, (int) (this.positionY + velocidad * delta),this.hitbox.width, this.hitbox.height);
-    
-        if (!nivel.colisionObstaculo(SiguientePosicion)) {
-            positionY = (this.positionY + velocidad * delta);
+        if(hitbox.y+hitbox.getHeight()<500){
+            if (!nivel.colisionObstaculo(SiguientePosicion)) {
+                positionY = (this.positionY + velocidad * delta);
+            }
         }
+        
 
     }
 
@@ -136,9 +155,12 @@ public class Popolon extends Personaje {
         Escenario nivel = Escenario.get_nivel();
         Rectangle SiguientePosicion = new Rectangle(this.hitbox.x, (int) (this.positionY - velocidad * delta),this.hitbox.width, this.hitbox.height);
        
-        if (!nivel.colisionObstaculo(SiguientePosicion)) {
-            positionY = (this.positionY - velocidad * delta);
+        if(hitbox.y>80){
+            if (!nivel.colisionObstaculo(SiguientePosicion)) {
+                positionY = (this.positionY - velocidad * delta);
+            }
         }
+        
 
     }
 
@@ -146,10 +168,12 @@ public class Popolon extends Personaje {
         Escenario nivel = Escenario.get_nivel();
         Rectangle SiguientePosicion = new Rectangle((int) (this.positionX - velocidad * delta),this.hitbox.y,this.hitbox.width,this.hitbox.height);
     
-    
-        if (!nivel.colisionObstaculo(SiguientePosicion)) {
-            positionX = (this.positionX - velocidad * delta);
+        if(this.hitbox.x>0){
+            if (!nivel.colisionObstaculo(SiguientePosicion)) {
+                positionX = (this.positionX - velocidad * delta);
+            }  
         }
+       
 
     }
 
@@ -162,5 +186,11 @@ public class Popolon extends Personaje {
         }
 
     }
+
+    public estados getEstado(){
+        return this.estadoActual;
+    }
+
+    
 
 }

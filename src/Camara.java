@@ -21,18 +21,15 @@ public class Camara {
 				this.y=0;
 		}
 
-		if(this.y < -(Escenario.ALTO-resY)){
-		this.y = -(Escenario.ALTO-resY);
-		}
+		// if(this.y < -(600-resY)){
+		// this.y = -(600-resY);
+		// }
 		
 		// if(this.y < -(nivel.getHeight()-resY)){
 		// 	this.y = -(nivel.getHeight()-resY);
 		// }
 	}
 
-	public void seguirLimite(){
-		this.y=-Escenario.get_nivel().getLimites().getY(); 
-	}
 	
 	public void setViewPort(double x,double y){
 		setRegionVisible(x,y);
