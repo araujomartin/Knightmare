@@ -10,6 +10,7 @@ public class PrimerNivel extends Escenario{
         super("imagenes/nivel1.png");
         generarEnemigos();
         generarObstaculos();
+        generarLadrillos();
         
         lastCheckPoint=0;
         checkpoint=new int[]{-4850,-4250};
@@ -59,7 +60,20 @@ public class PrimerNivel extends Escenario{
     }
 
     public void generarLadrillos(){
-
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 200, 5300-5450, 5,"torre"));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 450, 5050-5450, 5,"torre"));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 450, 5000-5450, 5, "torre"));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 350, 4600-5450, 10,"caballo"));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 150, 4400-5450, 5,"torre"));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 250, 4000-5450, 5,"torre"));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 250, 3900-5450, 5,"torre"));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 550, 3750-5450, 11,"rey"));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 650, 3250-5450, 5,"torre"));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 550, 2550-5450, 5,"torre"));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 250, 2550-5450, 5,"torre"));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 150, 2050-5450, 5,"torre"));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 300, 1950-5450, 10,"caballo"));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 400, 1600-5450, 5,"torre"));
     }
 
     public void generarEnemigos(){
@@ -78,6 +92,8 @@ public class PrimerNivel extends Escenario{
 
         enemigosColisionables.clear();
         muncionHeroe.removeAll(municionHeroeColisionada);
+        ladrillosColisionalbes.clear();
+        bonusObtenibles.clear();
 
         // Muevo el mapa, y objetos fijos siempre y cuando mi contador se encuentre por encima de 2, y el stop sea falso
         
@@ -87,11 +103,36 @@ public class PrimerNivel extends Escenario{
         for(Rectangle obstaculo:obstaculos){
             obstaculo.y++;
             }
+        for(Ladrillo ladrillo:ladrillos){
+            ladrillo.positionY++;
+            ladrillo.updateHitbox();
+            if(Escenario.get_nivel().limites.intersects(ladrillo.hitbox)){
+                ladrillo.setVisible(true);
+            }
+            else
+            {
+                ladrillo.setVisible(false);
+            }
+            
+            if(ladrillo.getVisible()){
+                ladrillosColisionalbes.add(ladrillo);
+            }
+        
+
+        }
         counter=0;
         }
         counter++;
 
-        
+        for(Ladrillo l: ladrillosColisionalbes){
+            l.update(delta);
+            if(l.getBroken() && !l.isPicked){
+                System.out.println("Agrega bonus");
+                bonusObtenibles.add(l);
+            }
+        }
+
+
         for(Enemigo e:primeraOleada){
             if(e.isVisible){
                 e.update(delta);

@@ -11,6 +11,7 @@ public abstract class Escenario {
     protected ArrayList<Rectangle> obstaculos=new ArrayList<Rectangle>(1);
     protected ArrayList<Ladrillo> ladrillos=new ArrayList<Ladrillo>(1);
 
+    protected ArrayList<Bonus> bonusObtenibles=new ArrayList<Bonus>(1);
     protected ArrayList<Ladrillo> ladrillosColisionalbes= new ArrayList<Ladrillo>(1);
     protected ArrayList<Enemigo> enemigosColisionables=new ArrayList<Enemigo>(1);
     protected ArrayList<Municion> municionHeroeColisionada=new ArrayList<Municion>(1);
@@ -76,6 +77,10 @@ public abstract class Escenario {
             g2.setColor(Color.RED);
             g2.draw(o);
         }
+
+        for(Ladrillo l:ladrillos){
+            l.display(g2);
+        }
         
         for(Municion m: muncionHeroe){
                 m.display(g2);  
@@ -92,6 +97,10 @@ public abstract class Escenario {
 
     public void addObstaculo(Rectangle obstaculo){
         obstaculos.add(obstaculo);
+    }
+
+    public void addLadrillos(Ladrillo ladrillo){
+        ladrillos.add(ladrillo);
     }
 
     public void addEnemigo(Enemigo enemigo){
@@ -116,6 +125,16 @@ public abstract class Escenario {
         // }   
         return false;
 
+    }
+
+    public boolean colisionBonus(Rectangle heroeHitbox){
+        for(Bonus b: bonusObtenibles){
+            if(b.hitbox.intersects(heroeHitbox)){
+                b.setPicked(true);
+                return true;
+            } 
+        }
+        return false;
     }
 
     public void stop(){
@@ -144,6 +163,10 @@ public abstract class Escenario {
         for(Rectangle o: obstaculos){
             o.y=o.y-movimiento;
         }
+        for(Ladrillo l: ladrillos){
+            l.positionY=l.positionY-movimiento;
+            l.restore();
+        }
                 
     }
 
@@ -154,7 +177,19 @@ public abstract class Escenario {
                 e.estado=Enemigo.estadoEnemigo.MUERTO;
                 return true;
             } 
-        }   
+        }
+        
+        for(Ladrillo l: ladrillosColisionalbes){
+            if(!l.getBroken()){
+                if(l.hitbox.intersects(municion.hitboxMunicion)){
+                    l.hit();
+                    return true;
+                }  
+            }
+            
+        }
+
+
         return false;
 
         

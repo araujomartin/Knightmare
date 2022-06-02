@@ -1,10 +1,8 @@
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 public abstract class Enemigo extends Personaje{
 
     protected boolean isHited=false;
+    protected int puntosAlMorir;
     private int timer=0;
 
     public enum estadoEnemigo{
@@ -41,6 +39,7 @@ public abstract class Enemigo extends Personaje{
         if (timer > 3) {
         timer=0;
         this.isVisible=false;
+        Knightmare.sumarScore(this.puntosAlMorir);
         }
         timer++;
         this.update(delta);

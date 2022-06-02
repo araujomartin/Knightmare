@@ -5,12 +5,14 @@ import javax.imageio.ImageIO;
 
 public class BombasRobot extends Enemigo {
 
+
     public BombasRobot(String filename, int x, int y, boolean shot) {
         super(filename, shot);
         this.hitbox = new Rectangle((int) this.positionX, (int) this.positionY, 40, 40);
         spritePosition = 1;
         this.positionX = x;
         this.positionY = y;
+        this.puntosAlMorir=10;
         this.estado = estadoEnemigo.VIVO;
     }
 
@@ -54,6 +56,7 @@ public class BombasRobot extends Enemigo {
                     if (isVisible == true) {
                         this.morir(delta);
                     }
+                    
                 }
 
             } catch (IOException e) {

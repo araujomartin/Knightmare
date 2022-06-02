@@ -6,6 +6,7 @@ public class Popolon extends Personaje {
 
     private estados estadoActual;
     public static Popolon popolon;
+
     
     public enum estados { // Los estados del personaje son publicos para poder cambiarlo a medida que transcurre el juego.
         VIVO,
@@ -35,8 +36,9 @@ public class Popolon extends Personaje {
     public void update(double delta) {
         updateHitBox(); // Primero que nada actualizar el hitbox
         updateArma((int)this.positionX+25, (int)this.positionY); // Actualizar la posicion del arma
+        Escenario.get_nivel().colisionBonus(this.hitbox);
         // Comparo el estado del personaje.
-
+        
         if (estadoActual == estados.VIVO) {
             try {
                 spriteCounter++;
@@ -89,12 +91,10 @@ public class Popolon extends Personaje {
 
                 spriteCounter++;
 
-                if (spriteCounter > 25) {
+                if (spriteCounter > 40 && spritePosition<10) {
 
                     spritePosition++;
-                    if(spritePosition>9){
-                        spritePosition=4;
-                    }
+                    
                     imagen = ImageIO.read(getClass().getResource("imagenes/popolon" + spritePosition + ".png"));
                     spriteCounter = 0;
                 }
@@ -108,6 +108,8 @@ public class Popolon extends Personaje {
         }
 
     }
+
+   
 
     public void cambiar(estados nuevo) {
 

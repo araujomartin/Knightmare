@@ -15,7 +15,10 @@ public enum FXPlayer {
    STAGE1("stage1.wav"),
    MUERTE("muriendo.wav"),
    FLECHA("flecha.wav"),
-   FUEGO("fuego.wav");
+   FUEGO("fuego.wav"),
+   INCOGNITO("incognito.wav"),
+   INCOGNITO_ROTO("incognito_roto.wav"),
+   BONUS("bonus.wav");
 
 
    public static enum Volume {
@@ -74,7 +77,9 @@ public enum FXPlayer {
 
       }
    }
-   public void loop(){
+   public void loop(float numero){
+      FloatControl f = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+        f.setValue(numero);
        if (volume != Volume.MUTE) {
          if (!clip.isRunning()){
               clip.loop(Clip.LOOP_CONTINUOUSLY);

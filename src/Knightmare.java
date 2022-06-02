@@ -25,12 +25,12 @@ public class Knightmare extends JGame {
     Popolon heroe = new Popolon("imagenes/popolon0.png");
     Escenario nivel;
     Camara cam;
-    Sonido reproducir;
+    //Sonido reproducir;
     Rectangle hud;
     private final ObjetoGrafico logo = new ObjetoGrafico("imagenes/logo.png");
     static int numeroNivel = 1;
     public int cantidadVidas = 3;
-    public int score = 0;
+    public static int score = 0;
     public int hiScore = 0;
     private Font font;
     private double timer = 0;
@@ -64,7 +64,7 @@ public class Knightmare extends JGame {
     @Override
     public void gameStartup() {
 
-        reproducir = new Sonido();
+        //reproducir = new Sonido();
         logo.setPosition(300, 250);
 
         try {
@@ -188,7 +188,7 @@ public class Knightmare extends JGame {
                 estadoJuego = gameStatus.LOOP;
                 try {
                     //reproducir.looping("sonidos/stage" + numeroNivel + ".wav");
-                    FXPlayer.STAGE1.play(-20.0f);
+                    FXPlayer.STAGE1.loop(-20.0f);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -294,6 +294,10 @@ public class Knightmare extends JGame {
 
     public static int nivel() {
         return numeroNivel;
+    }
+
+    public static void sumarScore(int puntos){
+        score=score+puntos;
     }
 
 }
