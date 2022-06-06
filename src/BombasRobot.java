@@ -8,12 +8,12 @@ public class BombasRobot extends Enemigo {
 
     public BombasRobot(String filename, int x, int y, boolean shot) {
         super(filename, shot);
-        this.hitbox = new Rectangle((int) this.positionX, (int) this.positionY, 40, 40);
+        this.hitbox = new Rectangle((int) x, (int) y, 40, 40);
         spritePosition = 1;
         this.positionX = x;
         this.positionY = y;
         this.puntosAlMorir=10;
-        this.estado = estadoEnemigo.VIVO;
+        
     }
 
     @Override
@@ -38,6 +38,8 @@ public class BombasRobot extends Enemigo {
             } catch (IOException e) {
                 System.out.println(e);
             }
+
+            return;
         }
 
         if (estado == estadoEnemigo.MUERTO) {
@@ -62,7 +64,12 @@ public class BombasRobot extends Enemigo {
             } catch (IOException e) {
                 System.out.println(e);
             }
+            return;
+        }
 
+        if(estado == estadoEnemigo.DESACTIVADO){
+            this.desactivado();
+            
         }
 
     }

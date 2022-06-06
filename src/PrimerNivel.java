@@ -1,19 +1,21 @@
 import java.awt.*;
-import java.util.ArrayList;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+
 
 public class PrimerNivel extends Escenario{
 
-    private ArrayList<Enemigo> primeraOleada;
 
-    
     public PrimerNivel(){
         super("imagenes/nivel1.png");
         generarEnemigos();
         generarObstaculos();
         generarLadrillos();
+        generarEsferas();
         
-        lastCheckPoint=0;
-        checkpoint=new int[]{-4850,-4250};
+        
+        checkpoint=new int[]{-4850,-4250,-2000,-700,0};
         
         
     }
@@ -60,116 +62,90 @@ public class PrimerNivel extends Escenario{
     }
 
     public void generarLadrillos(){
-        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 200, 5300-5450, 5,"torre"));
-        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 450, 5050-5450, 5,"torre"));
-        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 450, 5000-5450, 5, "torre"));
-        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 350, 4600-5450, 10,"caballo"));
-        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 150, 4400-5450, 5,"torre"));
-        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 250, 4000-5450, 5,"torre"));
-        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 250, 3900-5450, 5,"torre"));
-        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 550, 3750-5450, 11,"rey"));
-        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 650, 3250-5450, 5,"torre"));
-        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 550, 2550-5450, 5,"torre"));
-        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 250, 2550-5450, 5,"torre"));
-        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 150, 2050-5450, 5,"torre"));
-        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 300, 1950-5450, 10,"caballo"));
-        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 400, 1600-5450, 5,"torre"));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 200, 5300-5450, 1,"rey",false));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 450, 5050-5450, 5,"torre",false));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 450, 5000-5450, 5, "torre",false));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 350, 4600-5450, 10,"caballo",false));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 150, 4400-5450, 5,"torre",false));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 250, 4000-5450, 5,"torre",false));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 250, 3900-5450, 5,"torre",false));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 550, 3750-5450, 11,"rey",false));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 650, 3250-5450, 5,"torre",false));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 550, 2550-5450, 5,"torre",false));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 250, 2550-5450, 5,"torre",false));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 150, 2050-5450, 5,"torre",false));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 300, 1950-5450, 10,"caballo",false));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 400, 1600-5450, 5,"torre",false));
+
+        
+        //Ladrillos Ocultos
+
+        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 700, 4800-5450, 10,"caballo",true));
+        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 600, 4600-5450, 10,"torre",true));
+        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 600, 4500-5450, 10,"torre",true));
+        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 600, 4400-5450, 10,"torre",true));
+        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 250, 3800-5450, 10,"torre",true));
+        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 250, 3700-5450, 10,"torre",true));
+        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 300, 3050-5450, 10,"rey",true));
+        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 700, 2700-5450, 10,"reina",true));
+        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 400, 1450-5450, 10,"torre",true));
+        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 400, 1300-5450, 10,"torre",true));
+        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 150, 1100-5450, 10,"caballo",true));
+        
     }
 
     public void generarEnemigos(){
-        primeraOleada=new ArrayList<Enemigo>(6);
 
-        primeraOleada.add(new BombasRobot("imagenes/1.png", 440, -20, false));
-        primeraOleada.add(new BombasRobot("imagenes/1.png", 110, -100, false));
-        primeraOleada.add(new BombasRobot("imagenes/1.png", 530, -200, false));
-        primeraOleada.add(new BombasRobot("imagenes/1.png", 366, -300, false));
-        primeraOleada.add(new BombasRobot("imagenes/1.png", 640, -400, false));
-        primeraOleada.add(new BombasRobot("imagenes/1.png", 366, -500, false));
-   
+        
+        //Primera oleada
+        // this.addEnemigo(new BombasRobot("imagenes/1.png", 520, 5400-5450, false));
+        // this.addEnemigo(new BombasRobot("imagenes/1.png", 120, 5380-5450, false));
+        // this.addEnemigo(new BombasRobot("imagenes/1.png", 515, 5260-5450, false));
+        // this.addEnemigo(new BombasRobot("imagenes/1.png", 400, 5200-5450, false));
+        // this.addEnemigo(new BombasRobot("imagenes/1.png", 655, 5150-5450, false));
+        // this.addEnemigo(new BombasRobot("imagenes/1.png", 400, 5050-5450, false));
+
+        
+
+        try {
+            raf = new RandomAccessFile("nivel.dat", "rw");
+ 
+            for (Enemigo e: enemigos) {
+                raf.writeDouble(e.positionX);
+                raf.writeDouble(e.positionY);
+            }
+         
+         
+        } catch (FileNotFoundException ex) {
+            System.out.println(ex.getMessage());
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+
     }
 
-    public void update(double delta){
+    public void generarEsferas(){
+        this.addEsfera(new EsferaPowerUp("imagenes/powerNegro0.png", 520, 5400-5450));
 
-        enemigosColisionables.clear();
-        muncionHeroe.removeAll(municionHeroeColisionada);
-        ladrillosColisionalbes.clear();
-        bonusObtenibles.clear();
-
-        // Muevo el mapa, y objetos fijos siempre y cuando mi contador se encuentre por encima de 2, y el stop sea falso
-        
-        if(counter>2 && stop==false)
-        {
-        fondo.positionY++;    
-        for(Rectangle obstaculo:obstaculos){
-            obstaculo.y++;
+        try {
+            raf2 = new RandomAccessFile("esferas.dat", "rw");
+ 
+            for (Esfera e: esferas) {
+                raf2.writeDouble(e.positionX);
+                raf2.writeDouble(e.positionY);
             }
-        for(Ladrillo ladrillo:ladrillos){
-            ladrillo.positionY++;
-            ladrillo.updateHitbox();
-            if(Escenario.get_nivel().limites.intersects(ladrillo.hitbox)){
-                ladrillo.setVisible(true);
-            }
-            else
-            {
-                ladrillo.setVisible(false);
-            }
-            
-            if(ladrillo.getVisible()){
-                ladrillosColisionalbes.add(ladrillo);
-            }
-        
-
-        }
-        counter=0;
-        }
-        counter++;
-
-        for(Ladrillo l: ladrillosColisionalbes){
-            l.update(delta);
-            if(l.getBroken() && !l.isPicked){
-                System.out.println("Agrega bonus");
-                bonusObtenibles.add(l);
-            }
+         
+         
+        } catch (FileNotFoundException ex) {
+            System.out.println(ex.getMessage());
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
         }
 
-
-        for(Enemigo e:primeraOleada){
-            if(e.isVisible){
-                e.update(delta);
-                enemigosColisionables.add(e);
-            }
-        }
-        
-        for(Municion m: muncionHeroe){
-            if(this.colisionMunicion(m)){
-                m.hit();
-            }
-            if(m.isVisible){
-            m.update(delta);
-            }
-            else
-            municionHeroeColisionada.add(m);
-    
-        }
-
-        
-        // Los checkpoint se encuentran guardados por posicion del fondo, si esta posicion se supera movemos la posicion del ultimo checkpoint
-
-        
-            for(int i=0; i<checkpoint.length;i++){
-                if(checkpoint[i]==fondo.positionY){
-                    lastCheckPoint=checkpoint[i];
-                }
-            }
-        
-        
-        
-        
 
     }
 
     
-
 
 
     

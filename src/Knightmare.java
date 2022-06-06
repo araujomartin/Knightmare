@@ -8,32 +8,36 @@ java -cp ".;bucleJuego.jar" Knightmare
   */
 
 import com.entropyinteractive.*;
+
+
+
 import java.awt.*;
 import java.awt.event.*; //eventos
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.LinkedList;
 import java.awt.Graphics2D;
 
 public class Knightmare extends JGame {
 
-    Date dInit = new Date();
-    Date dAhora;
+   
     SimpleDateFormat ft = new SimpleDateFormat("mm:ss");
     public static Knightmare juego;
+    public static boolean boss=false;
     Popolon heroe = new Popolon("imagenes/popolon0.png");
     Escenario nivel;
-    Camara cam;
+    
     //Sonido reproducir;
     Rectangle hud;
+    Rectangle bonus;
     private final ObjetoGrafico logo = new ObjetoGrafico("imagenes/logo.png");
     static int numeroNivel = 1;
-    public int cantidadVidas = 3;
+    public static int cantidadVidas = 3;
     public static int score = 0;
     public int hiScore = 0;
     private Font font;
     private double timer = 0;
+    private double timerBonus=0;
 
     gameStatus estadoJuego;
 
@@ -43,7 +47,7 @@ public class Knightmare extends JGame {
         PAUSA,
         CARGANDO,
         GAME_OVER,
-        BOSS
+        BONUS,
     }
 
     // Rectangle HUD=new Rectangle(0,5900,800,400);
@@ -78,6 +82,7 @@ public class Knightmare extends JGame {
         }
         estadoJuego = gameStatus.MENU_PRINCIPAL;
         hud = new Rectangle(0, 500, 850, 500);
+        bonus= new Rectangle(650,95,67,34);
 
     }
 
@@ -108,7 +113,7 @@ public class Knightmare extends JGame {
             if (timer % 1 < 0.5) {
                 drawStyledString(g, "PUSH SPACE", 405, 450, true);
             }
-
+            return;
         }
 
         if (estadoJuego == gameStatus.CARGANDO) {
@@ -117,6 +122,8 @@ public class Knightmare extends JGame {
             g.setColor(Color.BLACK);
             g.fill(hud);
             updateHud(g);
+
+            return;
         }
 
         if (estadoJuego == gameStatus.LOOP) {
@@ -130,7 +137,26 @@ public class Knightmare extends JGame {
             g.fill(hud);
             updateHud(g);
 
+            return;
         }
+
+        if (estadoJuego == gameStatus.BONUS){
+            nivel.display(g);
+            heroe.display(g);
+            g.setColor(Color.BLACK);
+            g.draw(hud);
+            g.draw(bonus);
+            g.fill(bonus);
+            g.fill(hud);
+            updateBonus(g);
+            updateHud(g);
+            return;
+        }
+    }
+
+    public void updateBonus(Graphics2D g){
+        g.setFont(font.deriveFont(20f));
+        drawStyledString(g, Integer.toString((int)timerBonus),671,120,false);
     }
 
     public void updateHud(Graphics2D g) {
@@ -198,16 +224,34 @@ public class Knightmare extends JGame {
 
         }
 
-        if (estadoJuego == gameStatus.LOOP) {
+        if (estadoJuego == gameStatus.LOOP || estadoJuego==gameStatus.BONUS) {
 
+            if(estadoJuego==gameStatus.BONUS){
+                if(timerBonus==30){
+                    try {
+                        FXPlayer.STAGE1.stop();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if(timerBonus<0){
+                    estadoJuego= gameStatus.LOOP;
+                    FXPlayer.STAGE1.loop(-20.0f);
+                    nivel.stop=false;
+                }
+                timerBonus-=delta;
+
+                
+
+            }
             nivel.update(delta);
 
             if (heroe.getEstado() == Popolon.estados.MURIENDO) {
                 if(timer==0){
                     try {
-                        //reproducir.Stop();
-                        //reproducir.play("sonidos/muriendo.wav");
                         FXPlayer.STAGE1.stop();
+                        FXPlayer.BOSS1.stop();
                         FXPlayer.MUERTE.play(-20.0f);
                         nivel.stop();
                     } catch (Exception e) {
@@ -220,6 +264,7 @@ public class Knightmare extends JGame {
                 heroe.cambiar(Popolon.estados.VIVO);
                 cantidadVidas--;
                 nivel.reLoadStaticObjetcs();
+                boss=false;
                 
                 try {
                     //reproducir.play("sonidos/intro.wav");
@@ -233,6 +278,7 @@ public class Knightmare extends JGame {
                 timer += delta;
                 heroe.update(delta);
                 
+                return;
             }
 
             for (KeyEvent event : keyEvents) {
@@ -299,5 +345,29 @@ public class Knightmare extends JGame {
     public static void sumarScore(int puntos){
         score=score+puntos;
     }
+
+    public static void bossModeMusic(){
+
+        if(boss){
+            FXPlayer.STAGE1.stop();
+            FXPlayer.BOSS1.loop(-20.0f);
+        }
+        
+    }
+
+    protected void bonus(){
+        this.estadoJuego=gameStatus.BONUS;
+        timerBonus=30;
+    }
+
+    public static void toggleBoss(){
+        boss=!boss;
+    }
+
+    public static void sumarVida(){
+        cantidadVidas++;
+    }
+
+    
 
 }

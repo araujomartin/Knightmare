@@ -18,7 +18,8 @@ public enum FXPlayer {
    FUEGO("fuego.wav"),
    INCOGNITO("incognito.wav"),
    INCOGNITO_ROTO("incognito_roto.wav"),
-   BONUS("bonus.wav");
+   BONUS("bonus.wav"),
+   BOSS1("boss1.wav");
 
 
    public static enum Volume {

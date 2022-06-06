@@ -23,21 +23,6 @@ public abstract class Personaje extends ObjetoGrafico implements Movimiento {
         this.imagen=img;
     }
 
-    public void setX(double x){
-        positionX=x;
-    }
-
-    public void setY(double y){
-        positionY=y;
-    }
-    public double getX(){
-        return positionX; 
-    }
-
-    public double getY(){
-        return positionY; 
-    }
-
     public void display(Graphics2D g2){
         g2.drawImage(imagen, (int) this.positionX, (int) this.positionY, null);
         g2.draw(hitbox);

@@ -20,7 +20,7 @@ public class Popolon extends Personaje {
         estadoActual = estados.VIVO;
         velocidad = 150;
         isVisible=true;
-        hitbox = new Rectangle((int) this.positionX, (int) this.positionY, 50, 50); // Tamaño total de la imagen
+        hitbox = new Rectangle((int) this.positionX, (int) this.positionY, 45, 45); // Tamaño total de la imagen
         canShot=true;
         popolon=this;
         arma=new Arma(Arma.tipoMunicion.FLECHA, 0, 0);
@@ -28,7 +28,7 @@ public class Popolon extends Personaje {
     }
 
     public void display(Graphics2D g2){
-        g2.drawImage(imagen, (int) this.positionX, (int) this.positionY, 50, 50, null, null);
+        g2.drawImage(imagen, (int) this.positionX, (int) this.positionY, 45, 45, null, null);
         g2.draw(hitbox);
     }
 
@@ -63,6 +63,8 @@ public class Popolon extends Personaje {
             //     spritePosition=4;
             //     spriteCounter=0;
             // }
+
+            return;
         }
 
         if (estadoActual == estados.ROJO) {
@@ -91,7 +93,7 @@ public class Popolon extends Personaje {
 
                 spriteCounter++;
 
-                if (spriteCounter > 40 && spritePosition<10) {
+                if (spriteCounter > 10 && spritePosition<10) {
 
                     spritePosition++;
                     

@@ -37,13 +37,19 @@ public class ObjetoGrafico {
         g2.drawImage(imagen, (int) this.positionX, (int) this.positionY,null);
     }
 
-   
-
     public double getX() {
         return positionX;
     }
 
     public double getY() {
         return positionY;
+    }
+
+    public void setX(double x) {
+        this.positionX=x;
+    }
+
+    public void setY(double y) {
+        this.positionY=y;
     }
 }

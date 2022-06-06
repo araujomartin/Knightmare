@@ -8,15 +8,16 @@ public class Ladrillo extends Bonus {
 
     private boolean isBroken;
     private boolean isHited;
-    private boolean isVisible;
+    private boolean oculto;
     private String identificador;
 
-    public Ladrillo(String filename, int x, int y,int dureza, String identificador){
+    public Ladrillo(String filename, int x, int y,int dureza, String identificador, boolean oculto){
         super(filename);
         this.positionX=x;
         this.positionY=y;
         this.dureza=dureza;
         this.identificador=identificador;
+        this.oculto=oculto;
         this.isVisible=false;
         this.isBroken=false;
         this.isPicked=false;
@@ -34,6 +35,16 @@ public class Ladrillo extends Bonus {
     @Override
     public void update(double delta) {
         updateHitbox();
+
+        if(isHited && oculto){
+            try {
+                imagen = ImageIO.read(getClass().getResource("imagenes/incognito.png"));
+            }
+            catch (IOException e) {
+            System.out.println(e);
+        }
+
+        }
 
         if(isHited && this.dureza>0){
             FXPlayer.INCOGNITO.play(-5.0f);
@@ -73,15 +84,16 @@ public class Ladrillo extends Bonus {
             case "torre":{
                 Knightmare.sumarScore(500); 
             }break;
-            case "caballo":
-            
-            break;
-            case "rey":
-            
-            break;
+            case "caballo":{
+                Escenario.get_nivel().caballo();
+            }break;
+            case "rey":{
+                Escenario.get_nivel().rey();
+            }break;
             case "reina":
-            
-            break;
+            {
+                Knightmare.sumarVida();
+            }break;
         }
 
     }
@@ -96,7 +108,13 @@ public class Ladrillo extends Bonus {
         this.hitbox.y=(int)this.positionY;
 
         try {
-            imagen = ImageIO.read(getClass().getResource("imagenes/incognito.png"));
+            if(oculto){
+                imagen = ImageIO.read(getClass().getResource("imagenes/vacio.png"));
+            }
+            else
+            {
+                imagen = ImageIO.read(getClass().getResource("imagenes/incognito.png"));
+            }
         }
         catch (IOException e) {
         System.out.println(e);   
@@ -127,6 +145,8 @@ public class Ladrillo extends Bonus {
     public boolean getBroken(){
         return isBroken;
     }
+
+   
 
 
     

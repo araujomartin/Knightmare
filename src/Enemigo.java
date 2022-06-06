@@ -7,16 +7,27 @@ public abstract class Enemigo extends Personaje{
 
     public enum estadoEnemigo{
         VIVO,
-        MUERTO
+        MUERTO,
+        CONGELADO,
+        DESACTIVADO,
     }
     
     protected estadoEnemigo estado;
 
     public Enemigo(String filename, boolean shoot){
         super(filename);
-        isVisible=true;
+        this.estado = estadoEnemigo.DESACTIVADO;
+        isVisible=false;
         this.canShot=shoot;
     }
+
+    public void desactivado(){
+        this.positionY++;
+        this.hitbox.y++;
+
+        System.out.println(this+" y: "+hitbox.y);
+    }
+
 
     public void hitted(){
         this.isHited=true;
@@ -45,6 +56,14 @@ public abstract class Enemigo extends Personaje{
         this.update(delta);
         
 
+    }
+
+    public void restaurar(){
+        isVisible=false;
+        this.estado = estadoEnemigo.DESACTIVADO;
+        this.timer=0;
+        this.hitbox.y=(int)this.positionY;
+        this.hitbox.x=(int)this.positionX;
     }
 
     
