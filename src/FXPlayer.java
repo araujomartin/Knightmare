@@ -15,11 +15,20 @@ public enum FXPlayer {
    STAGE1("stage1.wav"),
    MUERTE("muriendo.wav"),
    FLECHA("flecha.wav"),
+   FLECHA_FUEGO("flecha_fuego.wav"),
+   BUMERAN("bumeran.wav"),
    FUEGO("fuego.wav"),
    INCOGNITO("incognito.wav"),
    INCOGNITO_ROTO("incognito_roto.wav"),
    BONUS("bonus.wav"),
-   BOSS1("boss1.wav");
+   BOSS1("boss1.wav"),
+   ESFERA("esfera.wav"),
+   POWERUP("powerup.wav"),
+   ESCUDO("escudo.wav"),
+   POWEREND("end1.wav"),
+   UP("1up.wav"),
+   ESPADA("espada.wav"),
+   TIEMPO("tiempo.wav");
 
 
    public static enum Volume {
@@ -62,9 +71,24 @@ public enum FXPlayer {
          if (!clip.isRunning()){
          	  clip.setFramePosition(0);
          		clip.start();
+         }else{
+               clip.stop();
+               clip.setFramePosition(0);
+         		clip.start();
          }
 
 
+      }
+   }
+
+   public void play2(float numero) {
+      FloatControl f = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+        f.setValue(numero);
+      if (volume != Volume.MUTE) {
+         if (!clip.isRunning()){
+         	  clip.setFramePosition(0);
+         		clip.start();
+         }
       }
    }
 
@@ -89,6 +113,8 @@ public enum FXPlayer {
 
       }
    }
+
+   
  
    static void init() {
       values();

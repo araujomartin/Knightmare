@@ -84,4 +84,17 @@ public class BombasRobot extends Enemigo {
         g2.draw(hitbox);
     }
 
+    public void restaurar(){
+        isVisible=false;
+        this.estado = estadoEnemigo.DESACTIVADO;
+        this.timer=0;
+        this.hitbox.y=(int)this.positionY;
+        this.hitbox.x=(int)this.positionX;
+        try {
+            this.imagen = ImageIO.read(getClass().getResource("imagenes/1.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

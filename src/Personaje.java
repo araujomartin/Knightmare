@@ -37,5 +37,7 @@ public abstract class Personaje extends ObjetoGrafico implements Movimiento {
         arma.setPosition(x, y);
     }
 
+    
+
 
 }

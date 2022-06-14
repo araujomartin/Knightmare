@@ -3,7 +3,7 @@ public abstract class Enemigo extends Personaje{
 
     protected boolean isHited=false;
     protected int puntosAlMorir;
-    private int timer=0;
+    protected int timer=0;
 
     public enum estadoEnemigo{
         VIVO,
@@ -20,6 +20,8 @@ public abstract class Enemigo extends Personaje{
         isVisible=false;
         this.canShot=shoot;
     }
+
+    public abstract void restaurar();
 
     public void desactivado(){
         this.positionY++;
@@ -41,7 +43,6 @@ public abstract class Enemigo extends Personaje{
 
         if(timer==0){
             try {
-                //Knightmare.juego.reproducir.playEffect("sonidos/fuego.wav");
                 FXPlayer.FUEGO.play(-5.0f);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -58,14 +59,11 @@ public abstract class Enemigo extends Personaje{
 
     }
 
-    public void restaurar(){
-        isVisible=false;
-        this.estado = estadoEnemigo.DESACTIVADO;
-        this.timer=0;
-        this.hitbox.y=(int)this.positionY;
-        this.hitbox.x=(int)this.positionX;
+    public void cambiar(){
+
     }
 
+  
     
     
     

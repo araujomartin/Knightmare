@@ -1,20 +1,24 @@
 import java.awt.Rectangle;
 
+
+
 public class EsferaArma extends Esfera{
 
     public enum tipoArma{
+        ESFERA,
         FLECHA,
         FLECHA_INCENDIARIA,
-        BOOMERANG,
+        BUMERAN,
         BOMBAS_FUEGO,
     }
 
-    tipoArma arma;
+    tipoArma municionEsfera;
 
     public EsferaArma(String filename,int x,int y) {
         super(filename);
         this.positionX=x;
         this.positionY=y;
+        this.municionEsfera=tipoArma.ESFERA;
         this.hitbox= new Rectangle(x,y,50,50);
        
     }
@@ -22,6 +26,16 @@ public class EsferaArma extends Esfera{
     @Override
     public void update(double delta) {
           
+    }
+
+    @Override
+    protected void cambiar() {
+        
+        
+    }
+
+    protected void restaurar(){
+        
     }
     
 }

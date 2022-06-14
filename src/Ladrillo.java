@@ -22,13 +22,13 @@ public class Ladrillo extends Bonus {
         this.isBroken=false;
         this.isPicked=false;
         this.isHited=false;
-        this.hitbox= new Rectangle(x,y,50,50);
+        this.hitbox= new Rectangle(x,y,45,45);
         
     }
 
     @Override
     public void display(Graphics2D g2) {
-        g2.drawImage(imagen, (int) this.positionX, (int) this.positionY, 50, 50, null, null);
+        g2.drawImage(imagen, (int) this.positionX, (int) this.positionY, 45, 45, null, null);
         g2.draw(hitbox);
     }
 
@@ -65,7 +65,6 @@ public class Ladrillo extends Bonus {
 
         if(this.dureza==0 && this.isPicked){
             this.dureza--;
-            FXPlayer.BONUS.play(-5.0f);
             otorgarBonus();
             try {
                 imagen = ImageIO.read(getClass().getResource("imagenes/ladrillo.png"));
@@ -82,16 +81,20 @@ public class Ladrillo extends Bonus {
 
         switch(this.identificador){
             case "torre":{
+                FXPlayer.BONUS.play(-5.0f);
                 Knightmare.sumarScore(500); 
             }break;
             case "caballo":{
+                FXPlayer.BONUS.play(-5.0f);
                 Escenario.get_nivel().caballo();
             }break;
             case "rey":{
+                FXPlayer.BONUS.play(-5.0f);
                 Escenario.get_nivel().rey();
             }break;
             case "reina":
             {
+                FXPlayer.UP.play(-10.0f);
                 Knightmare.sumarVida();
             }break;
         }

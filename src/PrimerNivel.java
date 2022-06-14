@@ -62,9 +62,9 @@ public class PrimerNivel extends Escenario{
     }
 
     public void generarLadrillos(){
-        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 200, 5300-5450, 1,"rey",false));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 200, 5300-5450, 1,"reina",false));
         this.addLadrillos(new Ladrillo("imagenes/incognito.png", 450, 5050-5450, 5,"torre",false));
-        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 450, 5000-5450, 5, "torre",false));
+        this.addLadrillos(new Ladrillo("imagenes/incognito.png", 450, 5005-5450, 5, "torre",false));
         this.addLadrillos(new Ladrillo("imagenes/incognito.png", 350, 4600-5450, 10,"caballo",false));
         this.addLadrillos(new Ladrillo("imagenes/incognito.png", 150, 4400-5450, 5,"torre",false));
         this.addLadrillos(new Ladrillo("imagenes/incognito.png", 250, 4000-5450, 5,"torre",false));
@@ -80,23 +80,25 @@ public class PrimerNivel extends Escenario{
         
         //Ladrillos Ocultos
 
-        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 700, 4800-5450, 10,"caballo",true));
-        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 600, 4600-5450, 10,"torre",true));
-        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 600, 4500-5450, 10,"torre",true));
-        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 600, 4400-5450, 10,"torre",true));
-        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 250, 3800-5450, 10,"torre",true));
-        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 250, 3700-5450, 10,"torre",true));
-        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 300, 3050-5450, 10,"rey",true));
-        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 700, 2700-5450, 10,"reina",true));
-        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 400, 1450-5450, 10,"torre",true));
-        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 400, 1300-5450, 10,"torre",true));
+        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 705, 4800-5450, 10,"caballo",true));
+        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 600, 4600-5450, 5,"torre",true));
+        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 600, 4500-5450, 5,"torre",true));
+        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 600, 4400-5450, 5,"torre",true));
+        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 250, 3800-5450, 5,"torre",true));
+        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 250, 3700-5450, 5,"torre",true));
+        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 300, 3050-5450, 11,"rey",true));
+        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 700, 2700-5450, 12,"reina",true));
+        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 400, 1450-5450, 5,"torre",true));
+        this.addLadrillos(new Ladrillo("imagenes/vacio.png", 400, 1300-5450, 5,"torre",true));
         this.addLadrillos(new Ladrillo("imagenes/vacio.png", 150, 1100-5450, 10,"caballo",true));
         
     }
 
     public void generarEnemigos(){
 
-        
+        this.addEnemigo(new BombasRobot("imagenes/1.png", 520, 5400-5450, false));
+        this.addEnemigo(new BombasRobot("imagenes/1.png", 520, 5350-5450, false));
+        this.addEnemigo(new BombasRobot("imagenes/1.png", 520, 5320-5450, false));
         //Primera oleada
         // this.addEnemigo(new BombasRobot("imagenes/1.png", 520, 5400-5450, false));
         // this.addEnemigo(new BombasRobot("imagenes/1.png", 120, 5380-5450, false));
@@ -125,8 +127,16 @@ public class PrimerNivel extends Escenario{
     }
 
     public void generarEsferas(){
-        this.addEsfera(new EsferaPowerUp("imagenes/powerNegro0.png", 520, 5400-5450));
+        this.addEsfera(new EsferaPowerUp("imagenes/powerNegro0.png", 630, 5000-5450));
+        this.addEsfera(new EsferaPowerUp("imagenes/powerNegro0.png", 630, 5100-5450));
 
+        //Esferas Power
+        // this.addEsfera(new EsferaPowerUp("imagenes/powerNegro0.png", 630, 4650-5450));
+        // this.addEsfera(new EsferaPowerUp("imagenes/powerNegro0.png", 350, 4000-5450));
+        // this.addEsfera(new EsferaPowerUp("imagenes/powerNegro0.png", 350, 2350-5450));
+        // this.addEsfera(new EsferaPowerUp("imagenes/powerNegro0.png", 150, 1700-5450));
+        // this.addEsfera(new EsferaPowerUp("imagenes/powerNegro0.png", 400, 1100-5450));
+        
         try {
             raf2 = new RandomAccessFile("esferas.dat", "rw");
  

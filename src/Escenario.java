@@ -4,6 +4,7 @@ import java.io.RandomAccessFile;
 import java.util.*;
 
 
+
 public abstract class Escenario {
 
     protected static Escenario NIVEL= null;
@@ -21,9 +22,8 @@ public abstract class Escenario {
     protected ArrayList<Esfera> esferas=new ArrayList<Esfera>(1);
 
 
-    protected ArrayList<Esfera> esferasRemover=new ArrayList<Esfera>(1);
-    protected ArrayList<Enemigo> enemigosRemover=new ArrayList<Enemigo>(1);
     protected ArrayList<Bonus> bonusObtenibles=new ArrayList<Bonus>(1);
+    protected ArrayList<Esfera> esferasColisionables= new ArrayList<Esfera>(1);
     protected ArrayList<Ladrillo> ladrillosColisionalbes= new ArrayList<Ladrillo>(1);
     protected ArrayList<Enemigo> enemigosColisionables=new ArrayList<Enemigo>(1);
     protected ArrayList<Municion> municionHeroeColisionada=new ArrayList<Municion>(1);
@@ -72,10 +72,10 @@ public abstract class Escenario {
 
     public void update(double delta){
 
-    
+        esferasColisionables.clear();
         enemigosColisionables.clear();
-        muncionHeroe.removeAll(municionHeroeColisionada);
         ladrillosColisionalbes.clear();
+        muncionHeroe.removeAll(municionHeroeColisionada);
         bonusObtenibles.clear();
 
         // Muevo el mapa, y objetos fijos siempre y cuando mi contador se encuentre por encima de 2, y el stop sea falso
@@ -102,6 +102,7 @@ public abstract class Escenario {
             ladrillo.updateHitbox();
             if(Escenario.get_nivel().limites.intersects(ladrillo.hitbox)){
                 ladrillo.setVisible(true);
+                
             }
             else
             {
@@ -120,9 +121,22 @@ public abstract class Escenario {
                     e.isVisible=true;
                     e.estado = Enemigo.estadoEnemigo.VIVO;
                 }
+            }   
+        }
+
+        for(Esfera esfera: esferas){
+            if(!esfera.activado){
+                esfera.positionY++;
+                esfera.updateHitbox();
+                if(Escenario.get_nivel().limites.intersects(esfera.hitbox)){
+                    esfera.setVisible(true);
+                    esfera.activado=true;
+                }
             }
             
         }
+        
+
         counter=0;
         }
         counter++;
@@ -138,9 +152,17 @@ public abstract class Escenario {
             }
         }
 
-        for(Esfera e: esferas){
-            e.update(delta);
+        for(Esfera esfera: esferas){
+            if(esfera.isVisible){
+                esfera.update(delta);
+                esferasColisionables.add(esfera);
+                if(!esfera.isPicked && this.limites.contains(esfera.hitbox)){
+                    System.out.println("Esfera obtenible");
+                    bonusObtenibles.add(esfera);
+                }
+            }     
         }
+ 
 
         for(Ladrillo l: ladrillosColisionalbes){
             l.update(delta);
@@ -151,14 +173,12 @@ public abstract class Escenario {
         }
         
         for(Municion m: muncionHeroe){
-            if(this.colisionMunicion(m)){
-                m.hit();
-            }
-            if(m.isVisible){
+            this.colisionMunicion(m); 
             m.update(delta);
+            if(!m.isVisible){
+                this.municionHeroeColisionada.add(m);
             }
-            else
-            municionHeroeColisionada.add(m);
+           
     
         }
 
@@ -196,7 +216,7 @@ public abstract class Escenario {
             l.display(g2);
         }
 
-        for(Esfera e:esferas){
+        for(Esfera e:esferasColisionables){
             e.display(g2);
         }
         
@@ -242,11 +262,14 @@ public abstract class Escenario {
     }
     
     public boolean colisionEnemigo(Rectangle heroeHitbox){
-        // for(Enemigo enemigo: enemigos){
-        //     if(enemigo.hitbox.intersects(heroeHitbox)){
-        //         return true;
-        //     } 
-        // }   
+        for(Enemigo enemigo: enemigosColisionables){
+            if(enemigo.hitbox.intersects(heroeHitbox)){
+                if(Popolon.popolon.getEstado()==Popolon.estados.ROJO){
+                    enemigo.estado=Enemigo.estadoEnemigo.MUERTO;
+                }
+                return true;
+            } 
+        }   
         return false;
 
     }
@@ -254,6 +277,7 @@ public abstract class Escenario {
     public boolean colisionBonus(Rectangle heroeHitbox){
         for(Bonus b: bonusObtenibles){
             if(b.hitbox.intersects(heroeHitbox)){
+                System.out.println("Intersecto");
                 b.setPicked(true);
                 return true;
             } 
@@ -261,11 +285,49 @@ public abstract class Escenario {
         return false;
     }
 
+    public boolean colisionMunicion(Municion municion){
+
+        for(Enemigo e: enemigosColisionables){
+            if(e.hitbox.intersects(municion.hitboxMunicion)){
+                municion.hitEnemigo();
+                e.estado=Enemigo.estadoEnemigo.MUERTO;
+                return true;
+            } 
+        }
+        
+        for(Ladrillo l: ladrillosColisionalbes){
+            if(!l.getBroken()){
+                if(l.hitbox.intersects(municion.hitboxMunicion)){
+                    municion.hitBonus();
+                    l.hit();
+                    return true;
+                }  
+            }
+            
+        }
+
+        for(Esfera e: esferasColisionables){
+            if(e.hitbox.intersects(municion.hitboxMunicion)){
+                municion.hitBonus();
+                e.golpeado=true;
+                return true;
+            } 
+        }
+
+
+        return false;
+
+        
+    }
+
     public void stop(){
         stop=true;
     }
 
-    public void reLoadStaticObjetcs(){
+    public void reCargarObjetos(){
+        ArrayList<Esfera> esferasRemover=new ArrayList<Esfera>(1);
+        ArrayList<Enemigo> enemigosRemover=new ArrayList<Enemigo>(1);
+
         int movimiento; //Variable para guardar cuanto se movio el mapa desde que arranco el nivel
         this.stop=false;    // Para que el mapa vuelva a moverse
         
@@ -293,7 +355,6 @@ public abstract class Escenario {
             raf2.seek(pos2);
             for(Enemigo e: enemigos){
                 e.setX(raf.readDouble());
-
                 if(lastCheckPoint==1){
                     e.setY(raf.readDouble());
                 }
@@ -308,8 +369,13 @@ public abstract class Escenario {
                 System.out.println("El hitbox restaurado en:"+ e.hitbox);
 
                 System.out.println("Contiene el punto ? : "+e.hitbox.x+","+e.hitbox.y);
-                if(limites.contains(e.hitbox.x,e.hitbox.y)){
-                    System.out.println("Si, lo tiene");
+                if(limites.contains(e.hitbox.x,e.hitbox.y) || e.hitbox.y>=580){
+                    if(limites.contains(e.hitbox.x,e.hitbox.y)){
+                        System.out.println("Si, el punto esta dentro de los limites");
+                    }
+                    else if(e.hitbox.y>=580){
+                        System.out.println("El punto esta abajo del limite del limite");
+                    }
                     enemigosRemover.add(e);
                     pos+=16;
                 }
@@ -319,26 +385,27 @@ public abstract class Escenario {
             }
 
             for(Esfera e: esferas){
-                e.setX(raf.readDouble());
+                e.setX(raf2.readDouble());
 
                 if(lastCheckPoint==1){
-                    e.setY(raf.readDouble());
+                    e.setY(raf2.readDouble());
                 }
                 else
                 {
-                    e.setY(raf.readDouble()+(5450+lastCheckPoint));
+                    e.setY(raf2.readDouble()+(5450+lastCheckPoint));
                 }
+
                 System.out.println("Posicionado en Y: "+e.getY());
                 System.out.println("El hitbox quedo en:"+ e.hitbox);
                 System.out.println("Ultimo checkpoint es:"+lastCheckPoint);
-
+                e.restaurar();
                 System.out.println("El hitbox restaurado en:"+ e.hitbox);
 
                 System.out.println("Contiene el punto ? : "+e.hitbox.x+","+e.hitbox.y);
-                if(limites.contains(e.hitbox.x,e.hitbox.y)){
+                if(limites.contains(e.hitbox.x,e.hitbox.y) || e.hitbox.y>=580){
                     System.out.println("Si, lo tiene");
                     esferasRemover.add(e);
-                    pos+=16;
+                    pos2+=16;
                 }
                 else{
                     System.out.println("No lo tiene");
@@ -376,37 +443,7 @@ public abstract class Escenario {
 
     
 
-    public boolean colisionMunicion(Municion municion){
-
-        for(Enemigo e: enemigosColisionables){
-            if(e.hitbox.intersects(municion.hitboxMunicion)){
-                e.estado=Enemigo.estadoEnemigo.MUERTO;
-                return true;
-            } 
-        }
-        
-        for(Ladrillo l: ladrillosColisionalbes){
-            if(!l.getBroken()){
-                if(l.hitbox.intersects(municion.hitboxMunicion)){
-                    l.hit();
-                    return true;
-                }  
-            }
-            
-        }
-
-        for(Esfera e: esferas){
-            if(e.hitbox.intersects(municion.hitboxMunicion)){
-                e.golpeado=true;
-                return true;
-            } 
-        }
-
-
-        return false;
-
-        
-    }
+   
     
     
     

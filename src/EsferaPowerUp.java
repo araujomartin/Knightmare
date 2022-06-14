@@ -1,7 +1,7 @@
 import java.awt.Rectangle;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
+
 
 public class EsferaPowerUp extends Esfera {
 
@@ -23,6 +23,7 @@ public class EsferaPowerUp extends Esfera {
         super(filename);
         this.positionX=x;
         this.positionY=y;
+        this.x_inicial=x;
         this.power=tipoPowerUp.NEGRO;
         this.hitbox= new Rectangle(x,y,50,50);
         
@@ -32,11 +33,23 @@ public class EsferaPowerUp extends Esfera {
     @Override
     public void update(double delta) {
 
-        this.moverse();
+        if(this.isPicked){
+            otorgarPowerUp();
+            isVisible=false;
+            return;
+        }
+
+
+        this.moverse(delta);    
        
         if(golpeado){
+            FXPlayer.ESFERA.play(-5.0f);
+            vecesGolpeado++;
             this.cambiar();
             golpeado=false;
+            if(vecesGolpeado>3){
+                this.cambiarMovimiento();
+            }
         }
 
         if(power==tipoPowerUp.NEGRO){
@@ -143,25 +156,45 @@ public class EsferaPowerUp extends Esfera {
             return;
 
         }
+    
+        
+        
         
     }
 
     public void otorgarPowerUp(){
         switch(power){
-            case NEGRO:
+            case NEGRO:{
+                FXPlayer.BONUS.play(-5.0f);
+                Knightmare.sumarScore(1000);
+            }
             break;
-            case CELESTE:
+            case CELESTE:{
+                FXPlayer.POWERUP.play(-20.0f);
+                Popolon.popolon.celeste();
+            }
             break;
-            case AZUL:
+            case AZUL:{
+                FXPlayer.POWERUP.play(-20.0f);
+                Popolon.velocidad();
+            }
             break;
-            case ROJO:
+            case ROJO:{
+                FXPlayer.POWERUP.play(-20.0f);
+                Popolon.popolon.cambiar(Popolon.estados.ROJO);
+                Knightmare.juego.powerup();
+            }
             break;
-            case BLANCO:
+            case BLANCO:{
+                FXPlayer.POWERUP.play(-20.0f);
+                Popolon.popolon.cambiar(Popolon.estados.INVISIBLE);
+                Knightmare.juego.powerup();
+            }
             break;
         }
     }
 
-    public void cambiar(){
+    protected void cambiar(){
         switch(power){
             case NEGRO:
             this.power=tipoPowerUp.CELESTE;
@@ -180,6 +213,20 @@ public class EsferaPowerUp extends Esfera {
             break;
         }
     }
+
+    public void restaurar(){
+        this.power=tipoPowerUp.NEGRO;
+        this.movimiento=tipoMovimiento.RECTO;
+        this.isPicked=false;
+        this.golpeado=false;
+        this.isVisible=false;
+        this.activado=false;
+        this.hitbox.x=(int)this.positionX;
+        this.hitbox.y=(int)this.positionY;
+        
+    }
+
+    
     
 }
 

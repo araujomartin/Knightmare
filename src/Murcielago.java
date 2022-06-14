@@ -15,5 +15,9 @@ public class Murcielago extends Enemigo{
         
     
     }
+
+    public void restaurar(){
+        
+    }
     
 }
