@@ -47,6 +47,9 @@ public class Arma {
     public void disparo() {
         switch(cadencia){
             case 1:{
+                if (municionActual == tipoMunicion.ENEMIGA){
+                    Escenario.get_nivel().municionEnemiga.add(new MunicionEnemiga("imagenes/municionEnemigo.png", this.x, this.y));
+                }
                 if(Escenario.get_nivel().muncionHeroe.size()<2){
 
                     if (municionActual == tipoMunicion.FLECHA) {

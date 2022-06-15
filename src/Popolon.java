@@ -27,7 +27,7 @@ public class Popolon extends Personaje {
         hitbox = new Rectangle((int) this.positionX, (int) this.positionY, 45, 45); // Tamaño total de la imagen
         canShot=true;
         popolon=this;
-        arma=new Arma(Arma.tipoMunicion.BUMERAN, 0, 0);
+        arma=new Arma(Arma.tipoMunicion.FLECHA, 0, 0);
         escudo=new Escudo("imagenes/escudoCeleste.png", 0, 0);
     }
 
@@ -47,6 +47,11 @@ public class Popolon extends Personaje {
         updateHitBox(); // Primero que nada actualizar el hitbox
         updateArma((int)this.positionX+15, (int)this.positionY);// Actualizar la posicion del arma
         Escenario.get_nivel().colisionBonus(this.hitbox);
+        if(estadoActual != estados.MURIENDO){
+            if(Escenario.get_nivel().colisionMunicionEnemiga(this)){
+                this.cambiar(estados.MURIENDO);
+            }
+        }
 
         
         
@@ -186,16 +191,6 @@ public class Popolon extends Personaje {
 
         this.estadoActual = nuevo;
 
-    }
-
-    public void disparar() {
-    
-        if(canShot){
-            arma.disparo();
-        }
-         
-        
-        
     }
 
     public void down(double delta) {

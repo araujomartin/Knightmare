@@ -16,9 +16,7 @@ public abstract class Personaje extends ObjetoGrafico implements Movimiento {
         super(filename);
     
     }
-
-    public abstract void disparar(); //todos los personajes pueden disparar
-    
+  
     public void setImagen(BufferedImage img){
         this.imagen=img;
     }
@@ -35,6 +33,12 @@ public abstract class Personaje extends ObjetoGrafico implements Movimiento {
 
     protected void updateArma(int x, int y){
         arma.setPosition(x, y);
+    }
+
+    public void disparar() {
+        if(canShot){
+            arma.disparo();
+        }
     }
 
     

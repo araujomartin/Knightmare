@@ -1,14 +1,63 @@
+import java.awt.*;
+
 public class MunicionEnemiga extends Municion{
 
-    public MunicionEnemiga(String filename) {
+    private double x2;
+    private double y2;
+    private double m;
+    private double b;
+
+    public MunicionEnemiga(String filename, int x, int y){
         super(filename);
-        //TODO Auto-generated constructor stub
+        this.positionX=x;
+        this.positionY=y;
+        this.isVisible=true;
+        this.x2=Popolon.popolon.getX();
+        this.y2=Popolon.popolon.getY();
+        this.calcularRecta();
+        
+        hitboxMunicion=new Rectangle((int)this.positionX,(int)this.positionY,15,15);
+    }
+    private void calcularRecta(){
+        this.m=(y2-this.positionY)/((x2-this.positionX));
+        this.b=y2-(m*x2);
+    }
+
+    private double calcularX(double y){
+        double x;
+        x=(y-b)/m;
+        return x;
+    }
+    private double calcularY(double x){
+        double y;
+        y=(m*x)+b;
+        return y;
     }
 
     @Override
     public void update(double delta) {
-        // TODO Auto-generated method stub
+        int velocidad=50;
+        if(hitEnemigo){
+            this.isVisible=false;
+            return;   
+        }
+        this.positionY=this.positionY+velocidad*delta;
+        this.positionX=this.calcularX(this.positionY);
+
+ 
+        
+        updateHitbox();
+
+        if(this.positionY>600){
+        this.isVisible=false;
+        }
+
         
     }
-    
+
+    public void display(Graphics2D g2) {
+        g2.drawImage(imagen, (int) this.positionX, (int) this.positionY,15,15,null);
+        g2.draw(hitboxMunicion); 
+    }
+
 }

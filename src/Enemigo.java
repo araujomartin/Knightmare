@@ -4,6 +4,7 @@ public abstract class Enemigo extends Personaje{
     protected boolean isHited=false;
     protected int puntosAlMorir;
     protected int timer=0;
+    protected double timerDisparo=0;
 
     public enum estadoEnemigo{
         VIVO,
@@ -26,8 +27,6 @@ public abstract class Enemigo extends Personaje{
     public void desactivado(){
         this.positionY++;
         this.hitbox.y++;
-
-        System.out.println(this+" y: "+hitbox.y);
     }
 
 

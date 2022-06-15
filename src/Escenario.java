@@ -26,7 +26,9 @@ public abstract class Escenario {
     protected ArrayList<Esfera> esferasColisionables= new ArrayList<Esfera>(1);
     protected ArrayList<Ladrillo> ladrillosColisionalbes= new ArrayList<Ladrillo>(1);
     protected ArrayList<Enemigo> enemigosColisionables=new ArrayList<Enemigo>(1);
+    protected ArrayList<Municion> municionEnemigaColisionada =new ArrayList<Municion>(1);
     protected ArrayList<Municion> municionHeroeColisionada=new ArrayList<Municion>(1);
+    protected ArrayList<Municion> municionEnemiga=new ArrayList<Municion>(1);
     public ArrayList<Municion> muncionHeroe=new ArrayList<Municion>(1);
     
 
@@ -76,7 +78,9 @@ public abstract class Escenario {
         enemigosColisionables.clear();
         ladrillosColisionalbes.clear();
         muncionHeroe.removeAll(municionHeroeColisionada);
+        municionEnemiga.removeAll(municionEnemigaColisionada);
         bonusObtenibles.clear();
+
 
         // Muevo el mapa, y objetos fijos siempre y cuando mi contador se encuentre por encima de 2, y el stop sea falso
         
@@ -85,7 +89,6 @@ public abstract class Escenario {
         }
 
         if(fondo.positionY>-750 && !Knightmare.boss){
-            System.out.println("Entro");
             Knightmare.toggleBoss();
             Knightmare.bossModeMusic();
         }
@@ -157,7 +160,6 @@ public abstract class Escenario {
                 esfera.update(delta);
                 esferasColisionables.add(esfera);
                 if(!esfera.isPicked && this.limites.contains(esfera.hitbox)){
-                    System.out.println("Esfera obtenible");
                     bonusObtenibles.add(esfera);
                 }
             }     
@@ -167,7 +169,6 @@ public abstract class Escenario {
         for(Ladrillo l: ladrillosColisionalbes){
             l.update(delta);
             if(l.getBroken() && !l.isPicked){
-                System.out.println("Agrega bonus");
                 bonusObtenibles.add(l);
             }
         }
@@ -180,6 +181,14 @@ public abstract class Escenario {
             }
            
     
+        }
+        for(Municion m: municionEnemiga){
+            if(m.isVisible){
+                m.update(delta);
+            }
+            else{
+               municionEnemigaColisionada.add(m);
+            }
         }
 
         
@@ -227,6 +236,10 @@ public abstract class Escenario {
         for(Enemigo e: enemigosColisionables){
             e.display(g2);
         }
+
+        for(Municion m: municionEnemiga){
+            m.display(g2);
+        }
         
 
     
@@ -260,6 +273,16 @@ public abstract class Escenario {
         }   
         return false;
     }
+
+    public boolean colisionMunicionEnemiga(Popolon popolon){
+        for(Municion municion: municionEnemiga){
+            if(popolon.hitbox.intersects(municion.hitboxMunicion)){
+                municion.hitEnemigo();
+                return true;
+            } 
+        }
+        return false; 
+    }
     
     public boolean colisionEnemigo(Rectangle heroeHitbox){
         for(Enemigo enemigo: enemigosColisionables){
@@ -277,7 +300,6 @@ public abstract class Escenario {
     public boolean colisionBonus(Rectangle heroeHitbox){
         for(Bonus b: bonusObtenibles){
             if(b.hitbox.intersects(heroeHitbox)){
-                System.out.println("Intersecto");
                 b.setPicked(true);
                 return true;
             } 
@@ -362,25 +384,10 @@ public abstract class Escenario {
                 {
                     e.setY(raf.readDouble()+(5450+lastCheckPoint));
                 }
-                System.out.println("Posicionado en Y: "+e.getY());
-                System.out.println("El hitbox quedo en:"+ e.hitbox);
-                System.out.println("Ultimo checkpoint es:"+lastCheckPoint);
                 e.restaurar();
-                System.out.println("El hitbox restaurado en:"+ e.hitbox);
-
-                System.out.println("Contiene el punto ? : "+e.hitbox.x+","+e.hitbox.y);
                 if(limites.contains(e.hitbox.x,e.hitbox.y) || e.hitbox.y>=580){
-                    if(limites.contains(e.hitbox.x,e.hitbox.y)){
-                        System.out.println("Si, el punto esta dentro de los limites");
-                    }
-                    else if(e.hitbox.y>=580){
-                        System.out.println("El punto esta abajo del limite del limite");
-                    }
                     enemigosRemover.add(e);
                     pos+=16;
-                }
-                else{
-                    System.out.println("No lo tiene");
                 }
             }
 
@@ -394,26 +401,13 @@ public abstract class Escenario {
                 {
                     e.setY(raf2.readDouble()+(5450+lastCheckPoint));
                 }
-
-                System.out.println("Posicionado en Y: "+e.getY());
-                System.out.println("El hitbox quedo en:"+ e.hitbox);
-                System.out.println("Ultimo checkpoint es:"+lastCheckPoint);
                 e.restaurar();
-                System.out.println("El hitbox restaurado en:"+ e.hitbox);
-
-                System.out.println("Contiene el punto ? : "+e.hitbox.x+","+e.hitbox.y);
                 if(limites.contains(e.hitbox.x,e.hitbox.y) || e.hitbox.y>=580){
-                    System.out.println("Si, lo tiene");
                     esferasRemover.add(e);
                     pos2+=16;
                 }
-                else{
-                    System.out.println("No lo tiene");
-                }
-
         }
-    
-        
+          
         } catch (IOException e1) {
             
             e1.printStackTrace();

@@ -96,9 +96,9 @@ public class PrimerNivel extends Escenario{
 
     public void generarEnemigos(){
 
-        this.addEnemigo(new BombasRobot("imagenes/1.png", 520, 5400-5450, false));
-        this.addEnemigo(new BombasRobot("imagenes/1.png", 520, 5350-5450, false));
-        this.addEnemigo(new BombasRobot("imagenes/1.png", 520, 5320-5450, false));
+        this.addEnemigo(new BombasRobot("imagenes/1.png", 520, 5400-5450, true));
+        // this.addEnemigo(new BombasRobot("imagenes/1.png", 490, 5350-5450, true));
+        // this.addEnemigo(new BombasRobot("imagenes/1.png", 300, 5320-5450, true));
         //Primera oleada
         // this.addEnemigo(new BombasRobot("imagenes/1.png", 520, 5400-5450, false));
         // this.addEnemigo(new BombasRobot("imagenes/1.png", 120, 5380-5450, false));

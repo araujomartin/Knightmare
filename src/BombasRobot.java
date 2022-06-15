@@ -13,15 +13,36 @@ public class BombasRobot extends Enemigo {
         this.positionX = x;
         this.positionY = y;
         this.puntosAlMorir=10;
+        this.canShot=shot;
+        if(canShot){
+            this.arma=new Arma(Arma.tipoMunicion.ENEMIGA, 0, 0);
+        }
         
     }
 
     @Override
     public void update(double delta) {
+        
+        if(this.positionY>600){
+            this.isVisible=false;
+            return;
+        }
 
-        if (estado == estadoEnemigo.VIVO) {
-            this.positionY++; // Se mueven 1 posicion para abajo
+        if (estado == estadoEnemigo.VIVO && this.isVisible) {
+            System.out.println("estoy vivo");   
+            this.positionY+=0.7;
             this.updateHitBox();
+            if(canShot){
+                this.updateArma((int)this.positionX+15, (int)this.positionY);
+                if(timerDisparo>2.5){
+                    this.disparar();
+                    timerDisparo=0;     
+                }
+                else{
+                    timerDisparo+=delta;
+                }
+                
+            }
             try {
                 spriteCounter++;
                 if (spriteCounter > 10) {
@@ -71,11 +92,6 @@ public class BombasRobot extends Enemigo {
             this.desactivado();
             
         }
-
-    }
-
-    @Override
-    public void disparar() {
 
     }
 
