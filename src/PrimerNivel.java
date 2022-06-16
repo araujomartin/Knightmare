@@ -120,7 +120,7 @@ public class PrimerNivel extends Escenario{
 
         this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4700-5450, false,"RIGHT"));
         this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4695-5450, true,"RIGHT"));
-        this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4690-5450, false,"RIGHT"));
+        this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4690-5450, true,"RIGHT"));
         this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4685-5450, false,"RIGHT"));
         this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4680-5450, false,"RIGHT"));
 
