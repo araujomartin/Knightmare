@@ -9,7 +9,7 @@ public class Murcielago extends Enemigo{
     private int x_inicial;
     private int mov;
 
-    public Murcielago(String filename, int x, int y, boolean shot, String movimiento) {
+    public Murcielago(String filename, int x, int y, boolean shot, String direccion) {
         super(filename, shot);
         this.hitbox = new Rectangle((int) x, (int) y, 45, 40);
         spritePosition = 1;
@@ -18,7 +18,7 @@ public class Murcielago extends Enemigo{
         this.x_inicial=x;
         this.puntosAlMorir=50;
         this.canShot=shot;
-        switch(movimiento){
+        switch(direccion){
             case "LEFT":
             this.mov=-1;
             break;
@@ -114,6 +114,7 @@ public class Murcielago extends Enemigo{
         this.timer=0;
         this.hitbox.y=(int)this.positionY;
         this.hitbox.x=(int)this.positionX;
+        this.variableMovimiento=Math.PI;
         try {
             this.imagen = ImageIO.read(getClass().getResource("imagenes/murcielago1.png"));
         } catch (IOException e) {

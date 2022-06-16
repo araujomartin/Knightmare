@@ -21,6 +21,7 @@ public enum FXPlayer {
    INCOGNITO("incognito.wav"),
    INCOGNITO_ROTO("incognito_roto.wav"),
    BONUS("bonus.wav"),
+   PAUSA("pausa.wav"),
    BOSS1("boss1.wav"),
    ESFERA("esfera.wav"),
    POWERUP("powerup.wav"),

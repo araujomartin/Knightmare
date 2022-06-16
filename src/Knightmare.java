@@ -12,20 +12,15 @@ import com.entropyinteractive.*;
 import java.awt.*;
 import java.awt.event.*; //eventos
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.awt.Graphics2D;
 
 public class Knightmare extends JGame {
 
-   
-    SimpleDateFormat ft = new SimpleDateFormat("mm:ss");
     public static Knightmare juego;
     public static boolean boss=false;
-    Popolon heroe = new Popolon("imagenes/popolon0.png");
+    Popolon heroe;
     Escenario nivel;
-    
-    //Sonido reproducir;
     Rectangle hud;
     Rectangle bonus;
     private final ObjetoGrafico logo = new ObjetoGrafico("imagenes/logo.png");
@@ -37,7 +32,7 @@ public class Knightmare extends JGame {
     private double timer = 0;
     private double timerBonus=0;
     private double timerPower=0;
-
+    
     gameStatus estadoJuego;
 
     enum gameStatus {
@@ -50,11 +45,18 @@ public class Knightmare extends JGame {
         POWERUP
     }
 
-    // Rectangle HUD=new Rectangle(0,5900,800,400);
 
     public Knightmare() {
         super("Juego", 800, 600);
         juego=this;
+        switch(appProperties.getProperty("sonido").toUpperCase()){
+            case "OFF":
+            FXPlayer.volume=FXPlayer.Volume.MUTE;
+            break;
+            case "ON":
+            FXPlayer.volume=FXPlayer.Volume.LOW;
+            break;
+        }
         FXPlayer.init();
 
     }
@@ -67,8 +69,7 @@ public class Knightmare extends JGame {
 
     @Override
     public void gameStartup() {
-
-        //reproducir = new Sonido();
+        this.heroe = new Popolon("imagenes/"+appProperties.getProperty("personaje")+"0.png");
         logo.setPosition(300, 250);
 
         try {
@@ -125,8 +126,8 @@ public class Knightmare extends JGame {
 
             return;
         }
-
-        if (estadoJuego == gameStatus.LOOP) {
+        
+        if (estadoJuego == gameStatus.LOOP || estadoJuego == gameStatus.PAUSA) {
 
             nivel.display(g);
             heroe.display(g);
@@ -227,6 +228,16 @@ public class Knightmare extends JGame {
 
         }
 
+        if (estadoJuego == gameStatus.PAUSA){
+            for (KeyEvent event : keyEvents) {
+                if ((event.getID() == KeyEvent.KEY_RELEASED) && (event.getKeyCode() == Integer.parseInt(appProperties.getProperty("pausa")))) {
+                    this.estadoJuego = gameStatus.LOOP;
+                    FXPlayer.PAUSA.play(-5.0f);
+                }     
+            }
+
+        }
+
         if (estadoJuego == gameStatus.LOOP || estadoJuego==gameStatus.BONUS || estadoJuego == gameStatus.POWERUP) {
 
             
@@ -299,8 +310,14 @@ public class Knightmare extends JGame {
             }
 
             for (KeyEvent event : keyEvents) {
-                if ((event.getID() == KeyEvent.KEY_RELEASED) && (event.getKeyCode() == KeyEvent.VK_SPACE)) {
+                if ((event.getID() == KeyEvent.KEY_RELEASED) && (event.getKeyCode() == Integer.parseInt(appProperties.getProperty("disparo")))) {
                     heroe.disparar();
+
+                }
+
+                if ((event.getID() == KeyEvent.KEY_RELEASED) && (event.getKeyCode() == Integer.parseInt(appProperties.getProperty("pausa")))) {
+                    this.estadoJuego = gameStatus.PAUSA;
+                    FXPlayer.PAUSA.play(-5.0f);
                 }
 
                 if ((event.getID() == KeyEvent.KEY_RELEASED) && (event.getKeyCode() == KeyEvent.VK_K)) {
@@ -310,7 +327,6 @@ public class Knightmare extends JGame {
 
                 
             }
-
             if(keyboard.isKeyPressed(KeyEvent.VK_T)){
                 heroe.cambiar(Popolon.estados.MURIENDO);
             }
@@ -325,16 +341,16 @@ public class Knightmare extends JGame {
                 hiScore = hiScore + 1000;
             }
 
-            if (keyboard.isKeyPressed(KeyEvent.VK_DOWN)) {
+            if (keyboard.isKeyPressed(Integer.parseInt(appProperties.getProperty("abajo")))) {
                 heroe.down(delta);
             }
-            if (keyboard.isKeyPressed(KeyEvent.VK_UP)) {
+            if (keyboard.isKeyPressed(Integer.parseInt(appProperties.getProperty("arriba")))) {
                 heroe.up(delta);
             }
-            if (keyboard.isKeyPressed(KeyEvent.VK_LEFT)) {
+            if (keyboard.isKeyPressed(Integer.parseInt(appProperties.getProperty("izquierda")))) {
                 heroe.left(delta);
             }
-            if (keyboard.isKeyPressed(KeyEvent.VK_RIGHT)) {
+            if (keyboard.isKeyPressed(Integer.parseInt(appProperties.getProperty("derecha")))) {
                 heroe.right(delta);
             }
 
