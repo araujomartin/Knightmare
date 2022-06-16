@@ -36,13 +36,11 @@ public class MunicionEnemiga extends Municion{
 
     @Override
     public void update(double delta) {
-        int velocidad=50;
         if(hitEnemigo){
             this.isVisible=false;
             return;   
         }
-        this.positionY=this.positionY+velocidad*delta;
-        this.positionX=this.calcularX(this.positionY);
+        this.positionY=this.positionY+(2);
 
  
         

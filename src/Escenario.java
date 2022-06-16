@@ -78,8 +78,8 @@ public abstract class Escenario {
         enemigosColisionables.clear();
         ladrillosColisionalbes.clear();
         muncionHeroe.removeAll(municionHeroeColisionada);
-        municionEnemiga.removeAll(municionEnemigaColisionada);
         bonusObtenibles.clear();
+        municionEnemigaColisionada.clear();
 
 
         // Muevo el mapa, y objetos fijos siempre y cuando mi contador se encuentre por encima de 2, y el stop sea falso
@@ -183,13 +183,16 @@ public abstract class Escenario {
     
         }
         for(Municion m: municionEnemiga){
-            if(m.isVisible){
                 m.update(delta);
+            
+            if(!m.isVisible){
+             municionEnemigaColisionada.add(m);
             }
-            else{
-               municionEnemigaColisionada.add(m);
-            }
+               
+        
         }
+
+        municionEnemiga.removeAll(municionEnemigaColisionada);
 
         
         // Los checkpoint se encuentran guardados por posicion del fondo, si esta posicion se supera movemos la posicion del ultimo checkpoint
@@ -276,6 +279,11 @@ public abstract class Escenario {
 
     public boolean colisionMunicionEnemiga(Popolon popolon){
         for(Municion municion: municionEnemiga){
+            if(popolon.escudo.isVisible() && popolon.escudo.getHitbox().intersects(municion.hitboxMunicion)){
+                System.out.println("entro");
+                popolon.escudo.hit();
+                municion.hitEnemigo();
+            }
             if(popolon.hitbox.intersects(municion.hitboxMunicion)){
                 municion.hitEnemigo();
                 return true;
@@ -349,6 +357,8 @@ public abstract class Escenario {
     public void reCargarObjetos(){
         ArrayList<Esfera> esferasRemover=new ArrayList<Esfera>(1);
         ArrayList<Enemigo> enemigosRemover=new ArrayList<Enemigo>(1);
+        this.municionEnemiga.clear();
+        this.muncionHeroe.clear();
 
         int movimiento; //Variable para guardar cuanto se movio el mapa desde que arranco el nivel
         this.stop=false;    // Para que el mapa vuelva a moverse

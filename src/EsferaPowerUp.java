@@ -5,9 +5,6 @@ import javax.imageio.ImageIO;
 
 public class EsferaPowerUp extends Esfera {
 
-    private int spriteCounter=0;
-    private int spritePosition=0;
-    
 
     public enum tipoPowerUp{
        NEGRO,

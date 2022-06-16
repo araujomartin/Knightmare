@@ -72,7 +72,6 @@ public enum FXPlayer {
          	  clip.setFramePosition(0);
          		clip.start();
          }else{
-               clip.stop();
                clip.setFramePosition(0);
          		clip.start();
          }

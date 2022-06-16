@@ -7,6 +7,9 @@ public abstract class Esfera extends Bonus{
     protected double variableMovimiento=0;
     protected int vecesGolpeado=0;
     protected boolean activado=false;
+    protected int spriteCounter=0;
+    protected int spritePosition=0;
+    
     
 
     protected enum tipoMovimiento{
@@ -44,7 +47,7 @@ public abstract class Esfera extends Bonus{
             case SENO:{
                 this.positionY+=0.7;
                 variableMovimiento+=delta;
-                positionX = x_inicial +(int) (Math.sin(variableMovimiento)*40); // Se mueve de a 20
+                positionX = x_inicial +(int) (Math.sin(variableMovimiento)*40); // Se mueve de a 40
                 this.updateHitbox(); 
             }
             break;

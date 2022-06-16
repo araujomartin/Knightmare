@@ -19,13 +19,14 @@ public class Escudo extends ObjetoGrafico{
     }
 
     public void update(){
-        updateHitbox();
-
+        
+        System.out.println("Resistencia escudo: "+this.resistencia);
         if(isHitted){
             FXPlayer.ESCUDO.play(-5.0f);
             resistencia--;
             isHitted=false;
         }
+        updateHitbox();
 
         if(resistencia==8){
             try {
@@ -80,6 +81,10 @@ public class Escudo extends ObjetoGrafico{
 
     public void hit(){
         isHitted=true;
+    }
+
+    public Rectangle getHitbox(){
+        return this.hitbox;
     }
     
     

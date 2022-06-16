@@ -29,7 +29,6 @@ public class BombasRobot extends Enemigo {
         }
 
         if (estado == estadoEnemigo.VIVO && this.isVisible) {
-            System.out.println("estoy vivo");   
             this.positionY+=0.7;
             this.updateHitBox();
             if(canShot){

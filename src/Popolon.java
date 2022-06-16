@@ -47,7 +47,7 @@ public class Popolon extends Personaje {
         updateHitBox(); // Primero que nada actualizar el hitbox
         updateArma((int)this.positionX+15, (int)this.positionY);// Actualizar la posicion del arma
         Escenario.get_nivel().colisionBonus(this.hitbox);
-        if(estadoActual != estados.MURIENDO){
+        if(estadoActual != estados.MURIENDO && estadoActual == estados.VIVO){
             if(Escenario.get_nivel().colisionMunicionEnemiga(this)){
                 this.cambiar(estados.MURIENDO);
             }

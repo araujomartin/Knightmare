@@ -21,10 +21,41 @@ public class Arma {
         this.y = y;
     }
 
-    public void aumentarCadencia() {
-        if (cadencia <= 2) {
-            cadencia++;
+    public void cambiarMunicion(String municion){
+        if(municion==this.municionActual.toString()){
+            cadencia=2;
         }
+        else{
+            cadencia=1;
+        }
+
+        switch(municion){
+            case "FLECHA":{
+                this.municionActual=tipoMunicion.FLECHA;
+            }
+            
+            break;
+            case "FLECHA_INCENDIARIA":{
+                this.municionActual=tipoMunicion.FLECHA_INCENDIARIA;
+            }
+            break;
+            case "BUMERAN":{
+                this.municionActual=tipoMunicion.BUMERAN;
+            }
+            break;
+            case "ESPADAS":{
+                this.municionActual=tipoMunicion.ESPADAS;
+            }
+            break;
+            case "BOLAFUEGO":{
+                this.municionActual=tipoMunicion.BOLAFUEGO;
+            }
+            break;
+        }
+    }
+
+    public void aumentarCadencia() {
+       cadencia=2;
     }
 
     public void resetCadencia() {
