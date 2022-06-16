@@ -96,46 +96,39 @@ public class PrimerNivel extends Escenario{
 
     public void generarEnemigos(){
 
-        // this.addEnemigo(new BombasRobot("imagenes/1.png", 520, 5100-5450, true));
-        // this.addEnemigo(new BombasRobot("imagenes/1.png", 490, 5050-5450, true));
-        // this.addEnemigo(new BombasRobot("imagenes/1.png", 300, 5020-5450, true));
-
+        this.addEnemigo(new Vikingo("imagenes/vikingo1.png", 400, 5400-5450, false));
 
         //Enemigos reales
-        this.addEnemigo(new BombasRobot("imagenes/1.png", 520, 5400-5450, false));
-        this.addEnemigo(new BombasRobot("imagenes/1.png", 120, 5380-5450, false));
-        this.addEnemigo(new BombasRobot("imagenes/1.png", 515, 5260-5450, false));
-        this.addEnemigo(new BombasRobot("imagenes/1.png", 400, 5200-5450, false));
-        this.addEnemigo(new BombasRobot("imagenes/1.png", 655, 5150-5450, false));
-        this.addEnemigo(new BombasRobot("imagenes/1.png", 400, 5050-5450, false));
-        this.addEnemigo(new BombasRobot("imagenes/1.png", 280, 5000-5450, true));
-        this.addEnemigo(new BombasRobot("imagenes/1.png", 110, 4900-5450, false));
-        this.addEnemigo(new BombasRobot("imagenes/1.png", 520, 4880-5450, false));
+        // this.addEnemigo(new BombasRobot("imagenes/1.png", 520, 5400-5450, false));
+        // this.addEnemigo(new BombasRobot("imagenes/1.png", 120, 5380-5450, false));
+        // this.addEnemigo(new BombasRobot("imagenes/1.png", 515, 5260-5450, false));
+        // this.addEnemigo(new BombasRobot("imagenes/1.png", 400, 5200-5450, false));
+        // this.addEnemigo(new BombasRobot("imagenes/1.png", 655, 5150-5450, false));
+        // this.addEnemigo(new BombasRobot("imagenes/1.png", 400, 5050-5450, false));
+        // this.addEnemigo(new BombasRobot("imagenes/1.png", 280, 5000-5450, true));
+        // this.addEnemigo(new BombasRobot("imagenes/1.png", 110, 4900-5450, false));
+        // this.addEnemigo(new BombasRobot("imagenes/1.png", 520, 4880-5450, false));
 
-        this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4800-5450, true,"LEFT"));
-        this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4795-5450, false,"LEFT"));
-        this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4790-5450, false,"LEFT"));
-        this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4785-5450, true,"LEFT"));
-        this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4780-5450, false,"LEFT"));
+        // this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4800-5450, true,"LEFT"));
+        // this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4795-5450, false,"LEFT"));
+        // this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4790-5450, false,"LEFT"));
+        // this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4785-5450, true,"LEFT"));
+        // this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4780-5450, false,"LEFT"));
 
-        this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4700-5450, false,"RIGHT"));
-        this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4695-5450, true,"RIGHT"));
-        this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4690-5450, true,"RIGHT"));
-        this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4685-5450, false,"RIGHT"));
-        this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4680-5450, false,"RIGHT"));
+        // this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4700-5450, false,"RIGHT"));
+        // this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4695-5450, true,"RIGHT"));
+        // this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4690-5450, true,"RIGHT"));
+        // this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4685-5450, false,"RIGHT"));
+        // this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4680-5450, false,"RIGHT"));
 
-        this.addEnemigo(new BombasRobot("imagenes/1.png", 450, 4680-5450, true));
+        // this.addEnemigo(new BombasRobot("imagenes/1.png", 450, 4680-5450, true));
 
-        this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4650-5450, false,"RIGHT"));
-        this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4645-5450, true,"RIGHT"));
-        this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4640-5450, false,"RIGHT"));
-        this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4635-5450, false,"RIGHT"));
-        this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4630-5450, false,"RIGHT"));
+        // this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4650-5450, false,"RIGHT"));
+        // this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4645-5450, true,"RIGHT"));
+        // this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4640-5450, false,"RIGHT"));
+        // this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4635-5450, false,"RIGHT"));
+        // this.addEnemigo(new Murcielago("imagenes/murcielago1.png", 460, 4630-5450, false,"RIGHT"));
 
-
-
-
-        
 
         try {
             raf = new RandomAccessFile("nivel.dat", "rw");

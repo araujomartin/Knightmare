@@ -114,7 +114,7 @@ public enum FXPlayer {
       }
    }
 
-   
+
  
    static void init() {
       values();

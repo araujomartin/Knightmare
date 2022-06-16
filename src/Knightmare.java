@@ -1,4 +1,3 @@
-
 /**
 Compilar
 javac -cp ".;bucleJuego.jar" Knightmare.java 
@@ -8,9 +7,8 @@ java -cp ".;bucleJuego.jar" Knightmare
   */
 
 import com.entropyinteractive.*;
-
 import java.awt.*;
-import java.awt.event.*; //eventos
+import java.awt.event.*;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.awt.Graphics2D;
@@ -24,7 +22,7 @@ public class Knightmare extends JGame {
     Rectangle hud;
     Rectangle bonus;
     private final ObjetoGrafico logo = new ObjetoGrafico("imagenes/logo.png");
-    static int numeroNivel = 1;
+    public static int numeroNivel = 1;
     public static int cantidadVidas = 3;
     public static int score = 0;
     public int hiScore = 0;
@@ -35,7 +33,7 @@ public class Knightmare extends JGame {
     
     gameStatus estadoJuego;
 
-    enum gameStatus {
+    public enum gameStatus {
         MENU_PRINCIPAL,
         LOOP,
         PAUSA,
@@ -44,7 +42,6 @@ public class Knightmare extends JGame {
         BONUS,
         POWERUP
     }
-
 
     public Knightmare() {
         super("Juego", 800, 600);
@@ -58,7 +55,6 @@ public class Knightmare extends JGame {
             break;
         }
         FXPlayer.init();
-
     }
 
     public static void main(String args[]) {
@@ -84,7 +80,6 @@ public class Knightmare extends JGame {
         estadoJuego = gameStatus.MENU_PRINCIPAL;
         hud = new Rectangle(0, 500, 850, 500);
         bonus= new Rectangle(650,95,67,34);
-
     }
 
     private void drawStyledString(Graphics2D g2, String str, int x, int y, boolean center) {
@@ -118,6 +113,7 @@ public class Knightmare extends JGame {
         }
 
         if (estadoJuego == gameStatus.CARGANDO) {
+
             g.setFont(font);
             drawStyledString(g, "STAGE "+Integer.toString(numeroNivel), 400, 200, true);
             g.setColor(Color.BLACK);
@@ -140,6 +136,7 @@ public class Knightmare extends JGame {
         }
 
         if (estadoJuego == gameStatus.BONUS || estadoJuego == gameStatus.POWERUP){
+
             nivel.display(g);
             heroe.display(g);
             g.setColor(Color.BLACK);
@@ -154,6 +151,7 @@ public class Knightmare extends JGame {
     }
 
     public void updateBonus(Graphics2D g){
+
         g.setFont(font.deriveFont(20f));
 
         if(estadoJuego == gameStatus.BONUS){
@@ -232,7 +230,9 @@ public class Knightmare extends JGame {
             for (KeyEvent event : keyEvents) {
                 if ((event.getID() == KeyEvent.KEY_RELEASED) && (event.getKeyCode() == Integer.parseInt(appProperties.getProperty("pausa")))) {
                     this.estadoJuego = gameStatus.LOOP;
+                    FXPlayer.STAGE1.loop(-20.0f);
                     FXPlayer.PAUSA.play(-5.0f);
+                    keyEvents.clear();
                 }     
             }
 
@@ -317,6 +317,7 @@ public class Knightmare extends JGame {
 
                 if ((event.getID() == KeyEvent.KEY_RELEASED) && (event.getKeyCode() == Integer.parseInt(appProperties.getProperty("pausa")))) {
                     this.estadoJuego = gameStatus.PAUSA;
+                    FXPlayer.STAGE1.stop();
                     FXPlayer.PAUSA.play(-5.0f);
                 }
 
