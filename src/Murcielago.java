@@ -10,7 +10,7 @@ public class Murcielago extends Enemigo{
     private int mov;
 
     public Murcielago(String filename, int x, int y, boolean shot, String direccion) {
-        super(filename, shot);
+        super(filename);
         this.hitbox = new Rectangle((int) x, (int) y, 45, 40);
         spritePosition = 1;
         this.positionX = x;

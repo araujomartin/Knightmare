@@ -9,6 +9,7 @@ public class Popolon extends Personaje {
     public Escudo escudo;
     private boolean escudoActivado=false;
     private static int powerVelocidad=0;
+    private boolean animacion=false;
 
 
     
@@ -44,113 +45,157 @@ public class Popolon extends Personaje {
 
 
     public void update(double delta) {
-        updateHitBox(); // Primero que nada actualizar el hitbox
-        updateArma((int)this.positionX+15, (int)this.positionY);// Actualizar la posicion del arma
-        Escenario.get_nivel().colisionBonus(this.hitbox);
-        if(estadoActual != estados.MURIENDO && estadoActual == estados.VIVO){
-            if(Escenario.get_nivel().colisionMunicionEnemiga(this)){
-                this.cambiar(estados.MURIENDO);
-            }
-        }
 
         
-        
-        if (estadoActual == estados.VIVO) {
+        if (animacion){
+            if(this.positionY<65){
+                this.animacion=false;
+                return;
+            }
+            if((int)this.positionX==400){
+                this.positionY--;
+            }
+            else if(this.positionX<=400){
+                this.positionX+=1;
+            }else if(this.positionX>=400){
+                this.positionX-=1;
+            }
             if(escudo.isVisible() && escudoActivado){
                 updateEscudo();
             }
+            
             try {
                 spriteCounter++;
-                if (spriteCounter > 10) { // Pongo un contador en 10, para que la transicion de la imagen no sea tan
-                                          // rapida (60 FPS)
+                if (spriteCounter > 10) { 
 
                     if (spritePosition == 0)
                         spritePosition = 1;
                     else if (spritePosition == 1)
                         spritePosition = 0;
 
-                    imagen = ImageIO.read(getClass().getResource("imagenes/popolon" + spritePosition + ".png"));
-                    spriteCounter = 0; // Cuando cambio la imagen reseteo el contador
+                    imagen = ImageIO.read(getClass().getResource("imagenes/"+Knightmare.juego.PERSONAJE+ spritePosition + ".png"));
+                    spriteCounter = 0; 
                 }
 
             } catch (IOException e) {
                 System.out.println(e);
             }
-
-            if(Escenario.get_nivel().colisionEnemigo(this.hitbox)){
-                estadoActual = estados.MURIENDO;
-                spritePosition=4;
-                spriteCounter=0;
-            }
-
-            return;
         }
-
-        if (estadoActual == estados.ROJO) {
-            try {
-                Escenario.get_nivel().colisionEnemigo(this.hitbox);
-                spriteCounter++;
-
-                if (spriteCounter > 10) {
-
-                    if (spritePosition == 3)
-                        spritePosition = 2;
-                    else if (spritePosition == 2)
-                        spritePosition = 3;
-
-                    imagen = ImageIO.read(getClass().getResource("imagenes/popolon" + spritePosition + ".png"));
-                    spriteCounter = 0;
-                }
-
-            } catch (IOException e) {
-                System.out.println(e);
-            }
-
-        }
-
-        if (estadoActual == estados.INVISIBLE) {
-            try {
-                spriteCounter++;
-
-                if (spriteCounter > 10) {
-
-                    if (spritePosition == 12)
-                        spritePosition = 11;
-                    else if (spritePosition == 11)
-                        spritePosition = 12;
-
-                    imagen = ImageIO.read(getClass().getResource("imagenes/popolon" + spritePosition + ".png"));
-                    spriteCounter = 0;
-                }
-
-            } catch (IOException e) {
-                System.out.println(e);
-            }
-
-        }
-
         
-
-        if (estadoActual == estados.MURIENDO){
-            try {
-
-                spriteCounter++;
-
-                if (spriteCounter > 10 && spritePosition<10) {
-
-                    spritePosition++;
-                    
-                    imagen = ImageIO.read(getClass().getResource("imagenes/popolon" + spritePosition + ".png"));
-                    spriteCounter = 0;
+        else
+        
+        {
+            updateHitBox(); // Primero que nada actualizar el hitbox
+            updateArma((int)this.positionX+15, (int)this.positionY);// Actualizar la posicion del arma
+            Escenario.get_nivel().colisionBonus(this.hitbox);
+            if(estadoActual != estados.MURIENDO && estadoActual == estados.VIVO){
+                if(Escenario.get_nivel().colisionMunicionEnemiga(this)){
+                    this.cambiar(estados.MURIENDO);
                 }
-
-            } catch (IOException e) {
-                System.out.println(e);
             }
-
+    
             
-
+            
+            if (estadoActual == estados.VIVO) {
+                if(escudo.isVisible() && escudoActivado){
+                    updateEscudo();
+                }
+                try {
+                    spriteCounter++;
+                    if (spriteCounter > 10) { // Pongo un contador en 10, para que la transicion de la imagen no sea tan
+                                              // rapida (60 FPS)
+    
+                        if (spritePosition == 0)
+                            spritePosition = 1;
+                        else if (spritePosition == 1)
+                            spritePosition = 0;
+    
+                        imagen = ImageIO.read(getClass().getResource("imagenes/"+Knightmare.juego.PERSONAJE+ spritePosition + ".png"));
+                        spriteCounter = 0; // Cuando cambio la imagen reseteo el contador
+                    }
+    
+                } catch (IOException e) {
+                    System.out.println(e);
+                }
+    
+                if(Escenario.get_nivel().colisionEnemigo(this.hitbox)){
+                    estadoActual = estados.MURIENDO;
+                    spritePosition=4;
+                    spriteCounter=0;
+                }
+    
+                return;
+            }
+    
+            if (estadoActual == estados.ROJO) {
+                try {
+                    Escenario.get_nivel().colisionEnemigo(this.hitbox);
+                    spriteCounter++;
+    
+                    if (spriteCounter > 10) {
+    
+                        if (spritePosition == 3)
+                            spritePosition = 2;
+                        else if (spritePosition == 2)
+                            spritePosition = 3;
+    
+                        imagen = ImageIO.read(getClass().getResource("imagenes/popolon" + spritePosition + ".png"));
+                        spriteCounter = 0;
+                    }
+    
+                } catch (IOException e) {
+                    System.out.println(e);
+                }
+    
+            }
+    
+            if (estadoActual == estados.INVISIBLE) {
+                try {
+                    spriteCounter++;
+    
+                    if (spriteCounter > 10) {
+    
+                        if (spritePosition == 12)
+                            spritePosition = 11;
+                        else if (spritePosition == 11)
+                            spritePosition = 12;
+    
+                        imagen = ImageIO.read(getClass().getResource("imagenes/popolon" + spritePosition + ".png"));
+                        spriteCounter = 0;
+                    }
+    
+                } catch (IOException e) {
+                    System.out.println(e);
+                }
+    
+            }
+    
+            
+    
+            if (estadoActual == estados.MURIENDO){
+                try {
+    
+                    spriteCounter++;
+    
+                    if (spriteCounter > 10 && spritePosition<10) {
+    
+                        spritePosition++;
+                        
+                        imagen = ImageIO.read(getClass().getResource("imagenes/popolon" + spritePosition + ".png"));
+                        spriteCounter = 0;
+                    }
+    
+                } catch (IOException e) {
+                    System.out.println(e);
+                }
+    
+                
+    
+            }
         }
+
+       
+        
 
     }
 
@@ -258,7 +303,14 @@ public class Popolon extends Personaje {
             powerVelocidad+=30;
         }
     }
-        
+    
+    public boolean animacion(){
+        return this.animacion;
+    }
+
+    public void setAnimacion(){
+        this.animacion=true;
+    }
 
     public void restaurar(){
         powerVelocidad=0;

@@ -4,13 +4,13 @@ import java.io.RandomAccessFile;
 import java.util.*;
 
 
-
 public abstract class Escenario {
 
     protected static Escenario NIVEL= null;
     protected Fondo fondo;
     protected final Rectangle limites;
     protected final int PILAR=94;
+    Enemigo jefeFinal;
 
     RandomAccessFile raf, raf2;
     protected int pos=0;
@@ -34,10 +34,8 @@ public abstract class Escenario {
 
     protected int counter=0;
     protected boolean stop=false;
-    protected int lastCheckPoint=1;
+    protected int lastCheckPoint=1; //1
     protected int[] checkpoint;
-    
-    
     
 
     protected Escenario(String filename){ //constructor protegido, solo quiero una instancia del nivel
@@ -52,6 +50,9 @@ public abstract class Escenario {
                     switch(Knightmare.numeroNivel){
                         case 1:
                         NIVEL = new PrimerNivel();
+                        break;
+                        case 2:
+                        NIVEL = new SegundoNivel();
                         break;
                     }
                     
@@ -74,6 +75,7 @@ public abstract class Escenario {
 
     public void update(double delta){
 
+    
         esferasColisionables.clear();
         enemigosColisionables.clear();
         ladrillosColisionalbes.clear();
@@ -81,22 +83,22 @@ public abstract class Escenario {
         bonusObtenibles.clear();
         municionEnemigaColisionada.clear();
 
-
         // Muevo el mapa, y objetos fijos siempre y cuando mi contador se encuentre por encima de 2, y el stop sea falso
         
         if(fondo.positionY==0){
             this.stop=true;
         }
 
-        if(fondo.positionY>-750 && !Knightmare.boss){
+        System.out.println(Knightmare.boss);
+        if(fondo.positionY>-350 && !Knightmare.boss){
             Knightmare.toggleBoss();
             Knightmare.bossModeMusic();
         }
         
-
         if(counter>2 && stop==false)
         {
-        fondo.positionY++;    
+        fondo.positionY++;
+        jefeFinal.update(delta);
         for(Rectangle obstaculo:obstaculos){
             obstaculo.y++;
             }
@@ -138,8 +140,6 @@ public abstract class Escenario {
             }
             
         }
-        
-
         counter=0;
         }
         counter++;
@@ -154,6 +154,10 @@ public abstract class Escenario {
                 enemigosColisionables.add(e);
             }
         }
+
+        
+        this.jefeFinal.update(delta);
+        
 
         for(Esfera esfera: esferas){
             if(esfera.isVisible){
@@ -240,6 +244,11 @@ public abstract class Escenario {
             e.display(g2);
         }
 
+        if(jefeFinal.isVisible){
+            jefeFinal.display(g2);
+        }
+        
+
         for(Municion m: municionEnemiga){
             m.display(g2);
         }
@@ -280,7 +289,6 @@ public abstract class Escenario {
     public boolean colisionMunicionEnemiga(Popolon popolon){
         for(Municion municion: municionEnemiga){
             if(popolon.escudo.isVisible() && popolon.escudo.getHitbox().intersects(municion.hitboxMunicion)){
-                System.out.println("entro");
                 popolon.escudo.hit();
                 municion.hitEnemigo();
             }
@@ -293,6 +301,10 @@ public abstract class Escenario {
     }
     
     public boolean colisionEnemigo(Rectangle heroeHitbox){
+
+        if(heroeHitbox.intersects(jefeFinal.hitbox)){
+            return true;
+        }
         for(Enemigo enemigo: enemigosColisionables){
             if(enemigo.hitbox.intersects(heroeHitbox)){
                 if(Popolon.popolon.getEstado()==Popolon.estados.ROJO){
@@ -316,6 +328,13 @@ public abstract class Escenario {
     }
 
     public boolean colisionMunicion(Municion municion){
+
+        if(jefeFinal.hitbox.intersects(municion.hitboxMunicion)){
+            municion.hitBonus();
+            municion.hitEnemigo();
+            jefeFinal.hitted();
+            return true;
+        }
 
         for(Enemigo e: enemigosColisionables){
             if(e.hitbox.intersects(municion.hitboxMunicion)){
@@ -382,6 +401,11 @@ public abstract class Escenario {
             l.restore();
         }
 
+        jefeFinal.restaurar();
+        if(lastCheckPoint!=1){
+            jefeFinal.positionY=jefeFinal.positionY+(5450+lastCheckPoint);
+        }
+
         try {
             raf.seek(pos);
             raf2.seek(pos2);
@@ -443,6 +467,23 @@ public abstract class Escenario {
         }
         this.stop=true;
         Knightmare.juego.bonus();
+    }
+
+    protected void clearAll(){
+
+        obstaculos.clear();
+        ladrillos.clear();
+        enemigos.clear();
+        esferas.clear();
+        bonusObtenibles.clear();
+        esferasColisionables.clear();
+        ladrillosColisionalbes.clear();
+        enemigosColisionables.clear();
+        municionEnemigaColisionada.clear();
+        municionHeroeColisionada.clear();
+        municionEnemiga.clear();
+        muncionHeroe.clear();
+
     }
 
     

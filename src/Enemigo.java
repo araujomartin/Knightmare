@@ -15,11 +15,10 @@ public abstract class Enemigo extends Personaje{
     
     protected estadoEnemigo estado;
 
-    public Enemigo(String filename, boolean shoot){
+    public Enemigo(String filename){
         super(filename);
         this.estado = estadoEnemigo.DESACTIVADO;
         isVisible=false;
-        this.canShot=shoot;
     }
 
     public abstract void restaurar();
@@ -58,11 +57,13 @@ public abstract class Enemigo extends Personaje{
 
     }
 
-    public void cambiar(){
-
+    public boolean activado(){
+        if(estado == estadoEnemigo.DESACTIVADO){
+            return false;
+        }
+        
+        return true;
     }
-
-  
     
     
     

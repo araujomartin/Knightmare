@@ -5,11 +5,12 @@ import javax.imageio.ImageIO;
 
 public class Vikingo extends Enemigo {
 
-    private int referenciaX;
-    private double timerMovimientoY=0;  
+    private double timerMovimientoY=0;
+    private int mov=1;
+
 
     public Vikingo(String filename, int x, int y, boolean shot) {
-        super(filename, shot);
+        super(filename);
         this.hitbox = new Rectangle((int) x, (int) y, 45, 45);
         spritePosition = 1;
         this.positionX = x;
@@ -34,11 +35,19 @@ public class Vikingo extends Enemigo {
             if(timerMovimientoY<2){
               this.positionY+=0.7;
             }
-            if(timerMovimientoY>2 && timerMovimientoY<4){
-              this.positionX++; 
+            if(timerMovimientoY>2 && timerMovimientoY<5){
+                if(85>this.positionX){
+                    mov=mov*-1;
+                }
+                if(680<this.positionX){
+                    mov=mov*-1;
+                }
+                this.positionX=this.positionX+(1*mov);
+                this.positionY+=0.2;
             }
-            if(timerMovimientoY>4){
+            if(timerMovimientoY>5){
                 timerMovimientoY=0;
+                mov=mov*-1;
             }
 
             timerMovimientoY+=delta;

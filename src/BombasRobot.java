@@ -7,7 +7,7 @@ public class BombasRobot extends Enemigo {
 
 
     public BombasRobot(String filename, int x, int y, boolean shot) {
-        super(filename, shot);
+        super(filename);
         this.hitbox = new Rectangle((int) x, (int) y, 40, 40);
         spritePosition = 1;
         this.positionX = x;

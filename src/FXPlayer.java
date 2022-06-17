@@ -23,12 +23,15 @@ public enum FXPlayer {
    BONUS("bonus.wav"),
    PAUSA("pausa.wav"),
    BOSS1("boss1.wav"),
+   BOSSHIT("bosshit.wav"),
+   BOSSMUERTE("bossmuerte.wav"),
    ESFERA("esfera.wav"),
    POWERUP("powerup.wav"),
    ESCUDO("escudo.wav"),
    POWEREND("end1.wav"),
    UP("1up.wav"),
    ESPADA("espada.wav"),
+   GAME_OVER("gameover.wav"),
    TIEMPO("tiempo.wav");
 
 

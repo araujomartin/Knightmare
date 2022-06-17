@@ -16,7 +16,7 @@ public class MunicionEnemiga extends Municion{
         this.y2=Popolon.popolon.getY();
         this.calcularRecta();
         
-        hitboxMunicion=new Rectangle((int)this.positionX,(int)this.positionY,15,15);
+        hitboxMunicion=new Rectangle((int)this.positionX,(int)this.positionY,13,13);
     }
     private void calcularRecta(){
         this.m=(y2-this.positionY)/((x2-this.positionX));
@@ -54,7 +54,7 @@ public class MunicionEnemiga extends Municion{
     }
 
     public void display(Graphics2D g2) {
-        g2.drawImage(imagen, (int) this.positionX, (int) this.positionY,15,15,null);
+        g2.drawImage(imagen, (int) this.positionX, (int) this.positionY,13,13,null);
         g2.draw(hitboxMunicion); 
     }
 

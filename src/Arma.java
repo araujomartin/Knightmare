@@ -10,7 +10,8 @@ public class Arma {
         BUMERAN,
         ESPADAS,
         BOLAFUEGO,
-        ENEMIGA
+        ENEMIGA,
+        RAYO
     }
 
     private tipoMunicion municionActual;
@@ -80,6 +81,9 @@ public class Arma {
             case 1:{
                 if (municionActual == tipoMunicion.ENEMIGA){
                     Escenario.get_nivel().municionEnemiga.add(new MunicionEnemiga("imagenes/municionEnemigo.png", this.x, this.y));
+                }
+                if (municionActual == tipoMunicion.RAYO){
+                    Escenario.get_nivel().municionEnemiga.add(new Rayos("imagenes/rayo.png", this.x, this.y));
                 }
                 if(Escenario.get_nivel().muncionHeroe.size()<2){
 

@@ -21,15 +21,18 @@ public class Knightmare extends JGame {
     Escenario nivel;
     Rectangle hud;
     Rectangle bonus;
+    Ranking rank;
     private final ObjetoGrafico logo = new ObjetoGrafico("imagenes/logo.png");
     public static int numeroNivel = 1;
-    public static int cantidadVidas = 3;
+    public static int cantidadVidas = 2;
     public static int score = 0;
     public int hiScore = 0;
     private Font font;
     private double timer = 0;
     private double timerBonus=0;
     private double timerPower=0;
+    private int up,down,left,right;
+    public final String PERSONAJE = appProperties.getProperty("personaje");
     
     gameStatus estadoJuego;
 
@@ -40,13 +43,15 @@ public class Knightmare extends JGame {
         CARGANDO,
         GAME_OVER,
         BONUS,
-        POWERUP
+        POWERUP,
+        SIGUIENTE,
     }
 
     public Knightmare() {
         super("Juego", 800, 600);
         juego=this;
-        switch(appProperties.getProperty("sonido").toUpperCase()){
+        
+        switch(appProperties.getProperty("sonidoGeneral").toUpperCase()){
             case "OFF":
             FXPlayer.volume=FXPlayer.Volume.MUTE;
             break;
@@ -55,6 +60,9 @@ public class Knightmare extends JGame {
             break;
         }
         FXPlayer.init();
+        rank=new Ranking();
+        this.hiScore=rank.getTop();
+
     }
 
     public static void main(String args[]) {
@@ -65,7 +73,7 @@ public class Knightmare extends JGame {
 
     @Override
     public void gameStartup() {
-        this.heroe = new Popolon("imagenes/"+appProperties.getProperty("personaje")+"0.png");
+        this.heroe = new Popolon("imagenes/"+PERSONAJE+"0.png");
         logo.setPosition(300, 250);
 
         try {
@@ -122,8 +130,19 @@ public class Knightmare extends JGame {
 
             return;
         }
+
+        if (estadoJuego == gameStatus.GAME_OVER) {
+
+            g.setFont(font);
+            drawStyledString(g, "GAME OVER", 400, 200, true);
+            g.setColor(Color.BLACK);
+            g.fill(hud);
+            updateHud(g);
+
+            return;
+        }
         
-        if (estadoJuego == gameStatus.LOOP || estadoJuego == gameStatus.PAUSA) {
+        if (estadoJuego == gameStatus.LOOP || estadoJuego == gameStatus.PAUSA || estadoJuego == gameStatus.SIGUIENTE) {
 
             nivel.display(g);
             heroe.display(g);
@@ -209,6 +228,16 @@ public class Knightmare extends JGame {
             }
         }
 
+        if(estadoJuego == gameStatus.SIGUIENTE){
+            if(heroe.animacion()){
+                heroe.update(delta);
+            }else{
+                Escenario.clear();
+                numeroNivel++;
+                estadoJuego= gameStatus.CARGANDO;
+            }
+        }
+
         if (estadoJuego == gameStatus.CARGANDO) {
             timer += delta;
             nivel = Escenario.get_nivel();
@@ -221,6 +250,16 @@ public class Knightmare extends JGame {
                     e.printStackTrace();
                 }
                 ;
+                timer=0;
+            }
+
+        }
+
+        if (estadoJuego == gameStatus.GAME_OVER) {
+            timer += delta;
+            if (timer > 11) {
+                estadoJuego = gameStatus.MENU_PRINCIPAL;
+                cantidadVidas=2;
                 timer=0;
             }
 
@@ -240,6 +279,9 @@ public class Knightmare extends JGame {
 
         if (estadoJuego == gameStatus.LOOP || estadoJuego==gameStatus.BONUS || estadoJuego == gameStatus.POWERUP) {
 
+            if(score>=hiScore){
+                hiScore=score;
+            }
             
                 if((estadoJuego==gameStatus.BONUS) && !(heroe.getEstado() == Popolon.estados.MURIENDO)){
                     if(timerBonus==20){
@@ -289,20 +331,34 @@ public class Knightmare extends JGame {
                 }
         
                 if (timer > 4) {
-                this.estadoJuego = gameStatus.CARGANDO;
-                heroe.restaurar();
-                nivel.reCargarObjetos();
-                boss=false;
                 cantidadVidas--;
-                try {
-                    //reproducir.play("sonidos/intro.wav");
-                    FXPlayer.INTRO.play(-20.0f);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                boss=false;
+                heroe.restaurar();
+                if(cantidadVidas<0){
+                    cantidadVidas=0;
+                    this.estadoJuego = gameStatus.GAME_OVER;
+                    try {
+                        FXPlayer.GAME_OVER.play(-20.0f);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    rank.actualizar(score);
+                    score=0;
+                    Escenario.clear();
                 }
-                ;
-                timer=0;
-                }
+                else{
+                    this.estadoJuego = gameStatus.CARGANDO;
+                    nivel.reCargarObjetos();
+                    try {
+                        FXPlayer.INTRO.play(-20.0f);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    ;
+                    timer=0;
+                    }
+                }    
+
                 timer += delta;
                 heroe.update(delta);
                 
@@ -310,12 +366,12 @@ public class Knightmare extends JGame {
             }
 
             for (KeyEvent event : keyEvents) {
-                if ((event.getID() == KeyEvent.KEY_RELEASED) && (event.getKeyCode() == Integer.parseInt(appProperties.getProperty("disparo")))) {
-                    heroe.disparar();
 
+                if ((event.getID() == KeyEvent.KEY_RELEASED) && (KeyEvent.getKeyText(event.getKeyCode()).toUpperCase().equals(appProperties.getProperty("disparo")))) {
+                    heroe.disparar();
                 }
 
-                if ((event.getID() == KeyEvent.KEY_RELEASED) && (event.getKeyCode() == Integer.parseInt(appProperties.getProperty("pausa")))) {
+                if ((event.getID() == KeyEvent.KEY_RELEASED) && (KeyEvent.getKeyText(event.getKeyCode()).toUpperCase().equals(appProperties.getProperty("pausa")))) {
                     this.estadoJuego = gameStatus.PAUSA;
                     FXPlayer.STAGE1.stop();
                     FXPlayer.PAUSA.play(-5.0f);
@@ -324,8 +380,24 @@ public class Knightmare extends JGame {
                 if ((event.getID() == KeyEvent.KEY_RELEASED) && (event.getKeyCode() == KeyEvent.VK_K)) {
                     heroe.escudo.hit();
                 }
-                
 
+                if ((KeyEvent.getKeyText(event.getKeyCode()).toUpperCase().equals(appProperties.getProperty("abajo")))){
+                    this.down=event.getKeyCode();
+                }
+
+                if ((KeyEvent.getKeyText(event.getKeyCode()).toUpperCase().equals(appProperties.getProperty("arriba")))){
+                    this.up=event.getKeyCode();
+                }
+        
+                if ((KeyEvent.getKeyText(event.getKeyCode()).toUpperCase().equals(appProperties.getProperty("izquierda")))){
+                    this.left=event.getKeyCode();
+                }
+
+                if ((KeyEvent.getKeyText(event.getKeyCode()).toUpperCase().equals(appProperties.getProperty("derecha")))){
+                    this.right=event.getKeyCode();
+                }
+         
+                
                 
             }
             if(keyboard.isKeyPressed(KeyEvent.VK_T)){
@@ -335,23 +407,17 @@ public class Knightmare extends JGame {
             if (nivel.colisionObstaculo(heroe.hitbox)) {
                 heroe.setY(heroe.getY() + 1);
             }
-
-            if (keyboard.isKeyPressed(KeyEvent.VK_J)) {
-                System.out.println("Hitbox heroe:" + heroe.hitbox);
-                score = score + 10000;
-                hiScore = hiScore + 1000;
-            }
-
-            if (keyboard.isKeyPressed(Integer.parseInt(appProperties.getProperty("abajo")))) {
+            
+            if (keyboard.isKeyPressed(down)) {
                 heroe.down(delta);
             }
-            if (keyboard.isKeyPressed(Integer.parseInt(appProperties.getProperty("arriba")))) {
+            if (keyboard.isKeyPressed(up)) {
                 heroe.up(delta);
             }
-            if (keyboard.isKeyPressed(Integer.parseInt(appProperties.getProperty("izquierda")))) {
+            if (keyboard.isKeyPressed(left)) {
                 heroe.left(delta);
             }
-            if (keyboard.isKeyPressed(Integer.parseInt(appProperties.getProperty("derecha")))) {
+            if (keyboard.isKeyPressed(right)) {
                 heroe.right(delta);
             }
 
@@ -385,7 +451,7 @@ public class Knightmare extends JGame {
 
     protected void powerup(){
         this.estadoJuego=gameStatus.POWERUP;
-        timerPower=45;
+        timerPower=35;
     }
 
     public static void toggleBoss(){
@@ -396,6 +462,11 @@ public class Knightmare extends JGame {
         cantidadVidas++;
     }
 
-    
+    public void siguienteNivel(){
+        FXPlayer.STAGE1.stop();
+        FXPlayer.BOSS1.stop();
+        this.estadoJuego = gameStatus.SIGUIENTE;
+        this.heroe.setAnimacion();
+    }
 
 }
