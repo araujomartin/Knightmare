@@ -2,7 +2,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.PrintWriter;
 import java.util.Properties;
 import javax.swing.*;
 
@@ -11,7 +10,7 @@ public class GameConfigV2 extends JFrame implements ActionListener {
 
     GridBagLayout gbl = new GridBagLayout();
     GridBagConstraints gbc = new GridBagConstraints();
-    String music_list[] = { "Original", "Final_Countdown" };
+    String music_list[] = { "Original", "Rocky" };
     String personajes[] = { "Popolon", "PopolonBoca"};
     JTabbedPane pestañas = new JTabbedPane();
     JDialog dialogo = new JDialog();
@@ -278,15 +277,15 @@ public class GameConfigV2 extends JFrame implements ActionListener {
         pistas.setSelectedIndex(0);
         personaje.setSelectedIndex(0);
 
-        efectos.setText(cfg.defaultProps.getProperty("Efectos"));
-        musica.setText(cfg.defaultProps.getProperty("Musica"));
-        pausa.setText(cfg.defaultProps.getProperty("Pausa"));
-        left.setText(cfg.defaultProps.getProperty("Left"));
-        right.setText(cfg.defaultProps.getProperty("Right"));
-        up.setText(cfg.defaultProps.getProperty("Up"));
-        down.setText(cfg.defaultProps.getProperty("Down"));
-        disparo.setText(cfg.defaultProps.getProperty("Disparo"));
-        enter.setText(cfg.defaultProps.getProperty("Enter"));
+        efectos.setText(cfg.defaultProps.getProperty("efectos"));
+        musica.setText(cfg.defaultProps.getProperty("musica"));
+        pausa.setText(cfg.defaultProps.getProperty("pausa"));
+        left.setText(cfg.defaultProps.getProperty("izquierda"));
+        right.setText(cfg.defaultProps.getProperty("derecha"));
+        up.setText(cfg.defaultProps.getProperty("arriba"));
+        down.setText(cfg.defaultProps.getProperty("abajo"));
+        disparo.setText(cfg.defaultProps.getProperty("disparo"));
+        enter.setText(cfg.defaultProps.getProperty("enter"));
 
 
 

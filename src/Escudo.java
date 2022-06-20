@@ -5,8 +5,8 @@ import javax.imageio.ImageIO;
 
 public class Escudo extends ObjetoGrafico{
 
+    private boolean isHitted=false;
     private int resistencia;
-    protected boolean isHitted=false;
     private Rectangle hitbox;
 
     public Escudo(String filename, int x, int y) {
@@ -20,7 +20,6 @@ public class Escudo extends ObjetoGrafico{
 
     public void update(){
         
-        System.out.println("Resistencia escudo: "+this.resistencia);
         if(isHitted){
             FXPlayer.ESCUDO.play(-5.0f);
             resistencia--;
@@ -63,7 +62,7 @@ public class Escudo extends ObjetoGrafico{
 
     public void display(Graphics2D g2){
         g2.drawImage(imagen, (int) this.positionX, (int) this.positionY, 45, 25, null, null);
-        g2.draw(hitbox);
+        // g2.draw(hitbox);
     }
 
     public boolean isVisible(){

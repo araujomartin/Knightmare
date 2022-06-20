@@ -96,7 +96,7 @@ public class BombasRobot extends Enemigo {
 
     public void display(Graphics2D g2) {
         g2.drawImage(imagen, (int) this.positionX, (int) this.positionY, 40, 40, null, null);
-        g2.draw(hitbox);
+        // g2.draw(hitbox);
     }
 
     public void restaurar(){

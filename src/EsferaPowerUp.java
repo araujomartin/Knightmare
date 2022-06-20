@@ -5,7 +5,8 @@ import javax.imageio.ImageIO;
 
 public class EsferaPowerUp extends Esfera {
 
-
+    private tipoPowerUp power;
+    
     public enum tipoPowerUp{
        NEGRO,
        CELESTE,
@@ -14,7 +15,6 @@ public class EsferaPowerUp extends Esfera {
        BLANCO, 
     }
 
-    private tipoPowerUp power;
 
     public EsferaPowerUp(String filename,int x,int y) {
         super(filename);

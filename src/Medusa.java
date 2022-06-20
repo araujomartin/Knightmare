@@ -10,7 +10,7 @@ public class Medusa extends Enemigo {
 
     public Medusa(String filename, int x, int y) {
         super(filename);
-        this.hitbox = new Rectangle((int) x+10, (int) y, 110, 90);
+        this.hitbox = new Rectangle((int) x+30, (int) y, 110, 90);
         spritePosition = 1;
         this.positionX = x;
         this.positionY = y;
@@ -26,6 +26,8 @@ public class Medusa extends Enemigo {
 
     @Override
     public void update(double delta) {
+
+        System.out.println(this.positionY);
 
         if(this.positionY>98){
             this.estado= estadoEnemigo.VIVO;

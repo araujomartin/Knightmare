@@ -18,7 +18,7 @@ public class Rayos extends Municion{
             this.isVisible=false;
             return;   
         }
-        this.positionY=this.positionY+(2);
+        this.positionY=this.positionY+(4);
 
         updateHitbox();
 
@@ -31,7 +31,7 @@ public class Rayos extends Municion{
 
     public void display(Graphics2D g2) {
         g2.drawImage(imagen, (int) this.positionX, (int) this.positionY,25,25,null);
-        g2.draw(hitboxMunicion); 
+        // g2.draw(hitboxMunicion); 
     }
 
 }

@@ -2,7 +2,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.border.*;
+
 
 
 public class SistemaJuego extends JFrame implements ActionListener{

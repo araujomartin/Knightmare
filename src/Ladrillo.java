@@ -29,7 +29,7 @@ public class Ladrillo extends Bonus {
     @Override
     public void display(Graphics2D g2) {
         g2.drawImage(imagen, (int) this.positionX, (int) this.positionY, 45, 45, null, null);
-        g2.draw(hitbox);
+        // g2.draw(hitbox);
     }
 
     @Override
@@ -101,7 +101,7 @@ public class Ladrillo extends Bonus {
 
     }
 
-    public void restore(){
+    public void restaurar(){
 
         this.isVisible=false;
         this.isPicked=false;

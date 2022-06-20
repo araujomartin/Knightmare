@@ -12,9 +12,9 @@ public class MunicionEnemiga extends Municion{
         this.positionX=x;
         this.positionY=y;
         this.isVisible=true;
-        this.x2=Popolon.popolon.getX();
-        this.y2=Popolon.popolon.getY();
-        this.calcularRecta();
+        // this.x2=Popolon.popolon.getX();
+        // this.y2=Popolon.popolon.getY();
+        // this.calcularRecta();
         
         hitboxMunicion=new Rectangle((int)this.positionX,(int)this.positionY,13,13);
     }
@@ -55,7 +55,7 @@ public class MunicionEnemiga extends Municion{
 
     public void display(Graphics2D g2) {
         g2.drawImage(imagen, (int) this.positionX, (int) this.positionY,13,13,null);
-        g2.draw(hitboxMunicion); 
+        // g2.draw(hitboxMunicion); 
     }
 
 }

@@ -13,6 +13,7 @@ public abstract class Bonus extends ObjetoGrafico{
 
     public abstract void display(Graphics2D g2);
     public abstract void update(double delta);
+    protected abstract void restaurar();
     
 
     protected void updateHitbox(){

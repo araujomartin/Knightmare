@@ -6,8 +6,8 @@ import java.io.*;
 public class ObjetoGrafico {
     protected BufferedImage imagen = null;
     protected boolean isVisible;
-    double positionX = 0;
-    double positionY = 0;
+    protected double positionX = 0;
+    protected double positionY = 0;
 
     
     public ObjetoGrafico(String filename) {

@@ -5,23 +5,20 @@ import java.util.*;
 
 
 public abstract class Escenario {
-
-    protected static Escenario NIVEL= null;
-    protected Fondo fondo;
-    protected final Rectangle limites;
-    protected final int PILAR=94;
-    Enemigo jefeFinal;
-
-    RandomAccessFile raf, raf2;
+    
+    protected boolean stop=false;
+    protected int lastCheckPoint=1; //1
     protected int pos=0;
     protected int pos2=0;
-    
+    protected int counterMapa=0;
+    protected int[] checkpoint;
+    protected RandomAccessFile raf, raf2;
+    protected Fondo fondo;
+    protected Enemigo jefeFinal;
     protected ArrayList<Rectangle> obstaculos=new ArrayList<Rectangle>(1);
     protected ArrayList<Ladrillo> ladrillos=new ArrayList<Ladrillo>(1);
     protected ArrayList<Enemigo> enemigos=new ArrayList<Enemigo>(1);
     protected ArrayList<Esfera> esferas=new ArrayList<Esfera>(1);
-
-
     protected ArrayList<Bonus> bonusObtenibles=new ArrayList<Bonus>(1);
     protected ArrayList<Esfera> esferasColisionables= new ArrayList<Esfera>(1);
     protected ArrayList<Ladrillo> ladrillosColisionalbes= new ArrayList<Ladrillo>(1);
@@ -29,16 +26,16 @@ public abstract class Escenario {
     protected ArrayList<Municion> municionEnemigaColisionada =new ArrayList<Municion>(1);
     protected ArrayList<Municion> municionHeroeColisionada=new ArrayList<Municion>(1);
     protected ArrayList<Municion> municionEnemiga=new ArrayList<Municion>(1);
+    protected static Escenario NIVEL= null;
+    protected final Rectangle limites;
+    protected final int PILAR=94;
+
+    
     public ArrayList<Municion> muncionHeroe=new ArrayList<Municion>(1);
-    
 
-    protected int counter=0;
-    protected boolean stop=false;
-    protected int lastCheckPoint=1; //1
-    protected int[] checkpoint;
-    
 
-    protected Escenario(String filename){ //constructor protegido, solo quiero una instancia del nivel
+    //constructor protegido, solo quiero una instancia del nivel
+    protected Escenario(String filename){ 
         fondo= new Fondo(filename);
         limites=new Rectangle(0,80,805,500);        
     }
@@ -47,7 +44,7 @@ public abstract class Escenario {
         if (NIVEL == null) {
             synchronized(Escenario.class) {
                 if (NIVEL == null) {
-                    switch(Knightmare.numeroNivel){
+                    switch(Knightmare.nivel()){
                         case 1:
                         NIVEL = new PrimerNivel();
                         break;
@@ -73,9 +70,13 @@ public abstract class Escenario {
         NIVEL=null;
     }
 
+    protected abstract void generarObstaculos();
+    protected abstract void generarEsferas();
+    protected abstract void generarLadrillos();
+    protected abstract void generarEnemigos();
+
     public void update(double delta){
 
-    
         esferasColisionables.clear();
         enemigosColisionables.clear();
         ladrillosColisionalbes.clear();
@@ -83,19 +84,17 @@ public abstract class Escenario {
         bonusObtenibles.clear();
         municionEnemigaColisionada.clear();
 
-        // Muevo el mapa, y objetos fijos siempre y cuando mi contador se encuentre por encima de 2, y el stop sea falso
-        
         if(fondo.positionY==0){
             this.stop=true;
         }
 
-        System.out.println(Knightmare.boss);
-        if(fondo.positionY>-350 && !Knightmare.boss){
+        if(fondo.positionY>-350){
             Knightmare.toggleBoss();
             Knightmare.bossModeMusic();
         }
+
         
-        if(counter>2 && stop==false)
+        if(counterMapa>2 && stop==false)
         {
         fondo.positionY++;
         jefeFinal.update(delta);
@@ -140,9 +139,9 @@ public abstract class Escenario {
             }
             
         }
-        counter=0;
+        counterMapa=0;
         }
-        counter++;
+        counterMapa++;
 
       
         for(Enemigo e: enemigos){
@@ -155,8 +154,12 @@ public abstract class Escenario {
             }
         }
 
+        if(this.jefeFinal.estado!=Enemigo.estadoEnemigo.DESACTIVADO){
+            this.jefeFinal.update(delta);
+        }else if (stop){
+            this.jefeFinal.update(delta);
+        }
         
-        this.jefeFinal.update(delta);
         
 
         for(Esfera esfera: esferas){
@@ -200,16 +203,13 @@ public abstract class Escenario {
 
         
         // Los checkpoint se encuentran guardados por posicion del fondo, si esta posicion se supera movemos la posicion del ultimo checkpoint
-
-        
-            for(int i=0; i<checkpoint.length;i++){
-                if(checkpoint[i]==fondo.positionY){
+        for(int i=0; i<checkpoint.length;i++){
+            if(checkpoint[i]==fondo.positionY){
                     lastCheckPoint=checkpoint[i];
-                }
             }
+        }
         
     }
-
 
     public float getWidth() {
         return (float) fondo.getWidth();
@@ -223,10 +223,10 @@ public abstract class Escenario {
         
         fondo.display(g2);
 
-        for(Rectangle o:obstaculos){
-            g2.setColor(Color.RED);
-            g2.draw(o);
-        }
+        // for(Rectangle o:obstaculos){
+        //     g2.setColor(Color.RED);
+        //     g2.draw(o);
+        // }
 
         for(Ladrillo l:ladrillos){
             l.display(g2);
@@ -253,8 +253,6 @@ public abstract class Escenario {
             m.display(g2);
         }
         
-
-    
       }
 
     
@@ -277,7 +275,7 @@ public abstract class Escenario {
     
 
     public boolean colisionObstaculo(Rectangle siguientePosicion){
-        
+
         for(Rectangle obstaculo: obstaculos){
             if(obstaculo.intersects(siguientePosicion)){
                 return true;
@@ -398,7 +396,7 @@ public abstract class Escenario {
         }
         for(Ladrillo l: ladrillos){
             l.positionY=l.positionY-movimiento;
-            l.restore();
+            l.restaurar();
         }
 
         jefeFinal.restaurar();
@@ -453,7 +451,6 @@ public abstract class Escenario {
         enemigosRemover.clear();
                 
     }
-
 
     protected void caballo(){
         for(Enemigo e: enemigosColisionables){

@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Ranking{
 
-	ArrayList<Integer> ranking=new ArrayList<Integer>(1);
+	private ArrayList<Integer> ranking=new ArrayList<Integer>(1);
 
 	public Ranking(){
 		this.cargar("ranking.txt",ranking);

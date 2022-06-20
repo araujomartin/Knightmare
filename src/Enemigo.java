@@ -2,9 +2,10 @@
 public abstract class Enemigo extends Personaje{
 
     protected boolean isHited=false;
+    protected estadoEnemigo estado;
+    protected double timerDisparo=0;
     protected int puntosAlMorir;
     protected int timer=0;
-    protected double timerDisparo=0;
 
     public enum estadoEnemigo{
         VIVO,
@@ -13,7 +14,6 @@ public abstract class Enemigo extends Personaje{
         DESACTIVADO,
     }
     
-    protected estadoEnemigo estado;
 
     public Enemigo(String filename){
         super(filename);

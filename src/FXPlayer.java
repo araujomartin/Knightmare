@@ -11,6 +11,8 @@ import javax.sound.sampled.*;
 
 
 public enum FXPlayer {
+   
+   MUSICA(Knightmare.juego.MUSICAFONDO),
    INTRO("intro.wav"),
    STAGE1("stage1.wav"),
    MUERTE("muriendo.wav"),
@@ -32,6 +34,7 @@ public enum FXPlayer {
    UP("1up.wav"),
    ESPADA("espada.wav"),
    GAME_OVER("gameover.wav"),
+   WINGAME("wingame.wav"),
    TIEMPO("tiempo.wav");
 
 
@@ -39,7 +42,7 @@ public enum FXPlayer {
       MUTE, LOW, MEDIUM, HIGH
    }
 
-   public static Volume volume = Volume.LOW;
+   public static Volume volume;
 
    
    private Clip clip;

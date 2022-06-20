@@ -4,15 +4,15 @@ import javax.imageio.*; //imagenes
 
 public class Popolon extends Personaje {
 
-    private estados estadoActual;
-    public static Popolon popolon;
-    public Escudo escudo;
     private boolean escudoActivado=false;
-    private static int powerVelocidad=0;
+    private int velocidad;
+    private estados estadoActual;
     private boolean animacion=false;
-
-
+    private static int powerVelocidad=0;
     
+    public Escudo escudo;
+    public static Popolon popolon;
+
     public enum estados { // Los estados del personaje son publicos para poder cambiarlo a medida que transcurre el juego.
         VIVO,
         MURIENDO,
@@ -23,7 +23,7 @@ public class Popolon extends Personaje {
     public Popolon(String filename) {
         super(filename);
         estadoActual = estados.VIVO;
-        velocidad = 150;
+        this.velocidad = 150;
         isVisible=true;
         hitbox = new Rectangle((int) this.positionX, (int) this.positionY, 45, 45); // Tamaño total de la imagen
         canShot=true;
@@ -34,7 +34,7 @@ public class Popolon extends Personaje {
 
     public void display(Graphics2D g2){
         g2.drawImage(imagen, (int) this.positionX, (int) this.positionY, 45, 45, null, null);
-        g2.draw(hitbox);
+        // g2.draw(hitbox);
 
         if(escudo.isVisible()){
            escudo.display(g2);
@@ -45,7 +45,6 @@ public class Popolon extends Personaje {
 
 
     public void update(double delta) {
-
         
         if (animacion){
             if(this.positionY<65){
@@ -85,6 +84,7 @@ public class Popolon extends Personaje {
         else
         
         {
+            
             updateHitBox(); // Primero que nada actualizar el hitbox
             updateArma((int)this.positionX+15, (int)this.positionY);// Actualizar la posicion del arma
             Escenario.get_nivel().colisionBonus(this.hitbox);
@@ -93,8 +93,10 @@ public class Popolon extends Personaje {
                     this.cambiar(estados.MURIENDO);
                 }
             }
+            if(this.hitbox.y+30>500 && estadoActual != estados.MURIENDO){
+                this.cambiar(estados.MURIENDO);
+            }
     
-            
             
             if (estadoActual == estados.VIVO) {
                 if(escudo.isVisible() && escudoActivado){
@@ -119,7 +121,7 @@ public class Popolon extends Personaje {
                 }
     
                 if(Escenario.get_nivel().colisionEnemigo(this.hitbox)){
-                    estadoActual = estados.MURIENDO;
+                    this.cambiar(estados.MURIENDO);
                     spritePosition=4;
                     spriteCounter=0;
                 }
@@ -194,8 +196,6 @@ public class Popolon extends Personaje {
             }
         }
 
-       
-        
 
     }
 

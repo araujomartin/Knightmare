@@ -31,7 +31,7 @@ public class Flecha extends Municion{
 
     public void display(Graphics2D g2) {
         g2.drawImage(imagen, (int) this.positionX, (int) this.positionY,14,30,null);
-        g2.draw(hitboxMunicion); 
+        // g2.draw(hitboxMunicion); 
     }
 
    

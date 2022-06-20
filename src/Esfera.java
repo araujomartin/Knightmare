@@ -3,15 +3,14 @@ import java.awt.*;
 public abstract class Esfera extends Bonus{
 
     protected boolean golpeado;
-    protected int x_inicial;
-    protected double variableMovimiento=0;
-    protected int vecesGolpeado=0;
     protected boolean activado=false;
+    protected double variableMovimiento=0;
+    protected int x_inicial;
+    protected int vecesGolpeado=0;
     protected int spriteCounter=0;
     protected int spritePosition=0;
     
     
-
     protected enum tipoMovimiento{
         RECTO,
         SENO,
@@ -27,12 +26,12 @@ public abstract class Esfera extends Bonus{
         this.isVisible=false;
     }
     protected abstract void cambiar();
-    protected abstract void restaurar();
+    public abstract void update(double delta);
 
     @Override
     public void display(Graphics2D g2) {
         g2.drawImage(imagen, (int) this.positionX, (int) this.positionY, 50, 50, null, null);
-        g2.draw(hitbox);
+        // g2.draw(hitbox);
     }
 
   

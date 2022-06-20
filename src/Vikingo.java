@@ -119,11 +119,11 @@ public class Vikingo extends Enemigo {
     public void display(Graphics2D g2) {
         if(estado ==  estadoEnemigo.MUERTO){
             g2.drawImage(imagen, (int) this.positionX, (int) this.positionY, 40, 40, null, null);
-            g2.draw(hitbox);
+            // g2.draw(hitbox);
         }
         else{
             g2.drawImage(imagen, (int) this.positionX, (int) this.positionY, 45, 45, null, null);
-            g2.draw(hitbox);
+            // g2.draw(hitbox);
         }
 
     }
